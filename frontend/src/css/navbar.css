@@ -1,0 +1,39 @@
+img{
+    /* padding: 17px; */
+    width: 10%;
+    object-fit: contain;
+}
+.navbar{
+    display: flex;
+    justify-content: space-around;
+    
+    box-shadow: 1px 2.5px 2px gray;
+
+}
+ul {
+    display: flex;
+    align-items: baseline;
+
+}
+a{
+    list-style: none;
+    text-decoration: none;
+    padding: 1px 15px;
+    color: black;
+}
+.primaryBtn{
+    cursor: pointer;
+    font-weight: bolder;
+    padding: 13px 25px;
+    border: none;
+    background:red;
+    color: white;
+    border-radius: 15px;
+    /* margin-left: 20px; */
+
+}
+.primaryBtn:hover{
+    transform:translateY(-2.5px);
+    box-shadow: black;
+    transition: all 0.25s ease-in;
+}

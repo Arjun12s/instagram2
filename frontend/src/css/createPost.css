@@ -1,0 +1,42 @@
+.createPost {
+    max-width: 500px;
+    margin: 10px auto;
+    align-items: center;
+    border-radius: 20px;
+    border: 1px solid rgba(128, 128, 128, 0.366);
+}
+
+.main-div {
+    border-top: 1px solid rgba(128, 128, 128, 0.366);
+}
+
+#output {
+    width: 300px;
+    border: none;
+    outline: none;
+    margin-top: 5px;
+    /* display: none; Initially hide both image and video */
+ } 
+
+.post-header {
+    display: flex;
+}
+
+#post-btn {
+    border: none;
+    font-size: 12px;
+    color: rgb(46, 185, 240);
+    font-weight: bolder;
+    cursor: pointer;
+    background: none;
+}
+
+.details {
+    border-top: 1px solid rgba(128, 128, 128, 0.366);
+}
+
+textarea {
+    width: 90%;
+    border: none;
+    outline: none;
+}
