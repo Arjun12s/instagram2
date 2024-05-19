@@ -35,7 +35,7 @@ export default function UserProfile() {
     
     const unfollowUser = (userId) => {
         fetch(`/unfollow`, {
-            method: "put",
+            method: "PUT",
             headers: {
                 "Content-Type": "application/json",
                 Authorization: "Bearer " + localStorage.getItem("jwt")
@@ -44,15 +44,21 @@ export default function UserProfile() {
                 followId: userId
             })
         })
-        .then((res) => res.json())  // Return the promise here
+        .then((res) => {
+            if (!res.ok) {
+                throw new Error('Network response was not ok ' + res.statusText);
+            }
+            return res.json();  // Return the promise here
+        })
         .then((data) => {
-            console.log(data);       // Now this will log the actual data
+            console.log(data);  // Now this will log the actual data
             setIsFollow(false);
         })
         .catch((error) => {
             console.error('Error:', error);
         });
     };
+    
     
 
     useEffect(() => {
