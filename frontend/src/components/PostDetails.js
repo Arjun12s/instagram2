@@ -3,7 +3,8 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import "../css/PostDetail.css";
 
-export default function PostDetail({ item, toggleDetails }) {
+export default function PostDetail({ posts,item, toggleDetails }) {
+    var picLink = "https://static.vecteezy.com/system/resources/thumbnails/002/318/271/small/user-profile-icon-free-vector.jpg";
 
     //toast function
     const notifyA = (msg) => toast.error(msg);
@@ -52,8 +53,8 @@ export default function PostDetail({ item, toggleDetails }) {
                 </div>
                 <div className="details">
                     <div className="card-header" style={{ borderBottom: "1px solid grey" }}>
-                        <div className="card-pic">
-                            <img src="https://images.unsplash.com/photo-1605909145192-c8e361e3eda7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHx0b3BpYy1mZWVkfDIwfFM0TUtMQXNCQjc0fHxlbnwwfHx8fHw%3D" alt="" />
+                    <div className="card-pic">
+                            <img src={posts.postedBy.Photo ? posts.postedBy.Photo : picLink} alt="" />
                         </div>
                         <h5>{item.postedBy.name}</h5>
                         <div className="deletePost" onClick={() => { removePost(item._id) }}>
