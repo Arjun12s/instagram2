@@ -12,39 +12,48 @@ export default function UserProfile() {
     const [posts, setPosts] = useState([]);
     const [isfollow, setIsFollow] = useState(false);
     // TO FOLLOW USER 
-    const followUser=(userId)=>{
-        fetch(`/follow`,{
-            method:"put",
+    const followUser = (userId) => {
+        fetch(`/follow`, {
+            method: "put",
             headers: {
-                "Content-Type":"application/json",
+                "Content-Type": "application/json",
                 Authorization: "Bearer " + localStorage.getItem("jwt")
             },
-            body:JSON.stringify({
-                followId:userId
+            body: JSON.stringify({
+                followId: userId
             })
-        }).then((res)=>{res.json()})
-        .then((data)=>{
-            console.log(data)
-            setIsFollow(true)
-
         })
-    }
-    const unfollowUser=(userId)=>{
-        fetch(`/unfollow`,{
-            method:"put",
+        .then((res) => res.json())  // Return the promise here
+        .then((data) => {
+            console.log(data);       // Now this will log the actual data
+            setIsFollow(true);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    };
+    
+    const unfollowUser = (userId) => {
+        fetch(`/unfollow`, {
+            method: "put",
             headers: {
-                "Content-Type":"application/json",
+                "Content-Type": "application/json",
                 Authorization: "Bearer " + localStorage.getItem("jwt")
             },
-            body:JSON.stringify({
-                followId:userId
+            body: JSON.stringify({
+                followId: userId
             })
-        }).then((res)=>{res.json()})
-        .then((data)=>{
-            console.log(data)
-            setIsFollow(false)
         })
-    }
+        .then((res) => res.json())  // Return the promise here
+        .then((data) => {
+            console.log(data);       // Now this will log the actual data
+            setIsFollow(false);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    };
+    
 
     useEffect(() => {
         fetch(`/user/${userid}`, {

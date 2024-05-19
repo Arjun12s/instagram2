@@ -12,7 +12,7 @@ app.use(cors());
 router.get("/allposts", requireLogin, (req, res) => {
     POST.find()
         .populate("postedBy", "_id name Photo")
-        .populate("comments.postedBy", "_id name Photo")
+        .populate("comments.postedBy", "_id name")
         .sort("-createdAt")
         .then(posts => res.json(posts))
         .catch(err => console.log(err));
@@ -43,7 +43,7 @@ router.post("/createPost", requireLogin, (req, res) => {
 router.get("/myposts", requireLogin, (req, res) => {
     POST.find({ postedBy: req.user._id })
         .populate("postedBy", "_id name Photo")
-        .populate("comments.postedBy", "_id name Photo")
+        .populate("comments.postedBy", "_id name")
         .sort("-createdAt")
         .then(myposts => res.json(myposts))
         .catch(err => console.log(err));
@@ -56,7 +56,7 @@ router.put("/like", requireLogin, (req, res) => {
     }, {
         new: true
     }).populate("postedBy", "_id name Photo")
-        .populate("comments.postedBy", "_id name Photo")
+        .populate("comments.postedBy", "_id name")
         .then(result => res.json(result))
         .catch(err => {
             console.log(err);
@@ -71,7 +71,7 @@ router.put("/unlike", requireLogin, (req, res) => {
     }, {
         new: true
     }).populate("postedBy", "_id name Photo")
-        .populate("comments.postedBy", "_id name Photo")
+        .populate("comments.postedBy", "_id name")
         .then(result => res.json(result))
         .catch(err => {
             console.log(err);
@@ -92,7 +92,8 @@ router.put("/comment", requireLogin, (req, res) => {
     }, {
         new: true
     })
-    .populate("comments.postedBy", "_id name Photo")
+    .populate("comments.postedBy", "_id name")
+    
     .populate("postedBy", "_id name Photo")
     .then(result => {
         if (!result) {
@@ -139,7 +140,7 @@ router.delete("/deletePost/:postId", requireLogin, (req, res) => {
 router.get("/myfollowingpost", requireLogin, (req, res) => {
     POST.find({ postedBy: { $in: req.user.following } })
         .populate("postedBy", "_id name Photo")
-        .populate("comments.postedBy", "_id name Photo")
+        .populate("comments.postedBy", "_id name")
         .then(posts => res.json(posts))
         .catch(err => {
             console.error(err);

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "../css/PostDetail.css";
 
 export default function PostDetail({ item, toggleDetails }) {
-
+    console.log(item.comments);
     //toast function
     const notifyA = (msg) => toast.error(msg);
     const notifyB = (msg) => toast.success(msg);
@@ -19,30 +19,30 @@ export default function PostDetail({ item, toggleDetails }) {
                     Authorization: "Bearer " + localStorage.getItem("jwt")
                 },
             })
-            .then((res) => {
-                if (!res.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return res.json();
-            })
-            .then((result) => {
-                notifyB(result.msg);
-                if (typeof toggleDetails === 'function') {
-                    toggleDetails();
-                } else {
-                    console.error("toggleDetails is not a function");
-                }
-                notifyB("Post deleted sucessfully");
-                navigate("/"); // Navigate to home page
-                
-            })
-            .catch((error) => {
-                notifyA("Error deleting post");
-                console.error("Error deleting post:", error);
-            });
+                .then((res) => {
+                    if (!res.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return res.json();
+                })
+                .then((result) => {
+                    notifyB(result.msg);
+                    if (typeof toggleDetails === 'function') {
+                        toggleDetails();
+                    } else {
+                        console.error("toggleDetails is not a function");
+                    }
+                    notifyB("Post deleted sucessfully");
+                    navigate("/"); // Navigate to home page
+
+                })
+                .catch((error) => {
+                    notifyA("Error deleting post");
+                    console.error("Error deleting post:", error);
+                });
         }
     };
-    
+
 
     return (
         <div className="showComment">
@@ -53,7 +53,7 @@ export default function PostDetail({ item, toggleDetails }) {
                 <div className="details">
                     <div className="card-header" style={{ borderBottom: "1px solid grey" }}>
                         <div className="card-pic">
-                        <img src={JSON.parse(localStorage.getItem("user")).Photo} alt="" />
+                            <img src={JSON.parse(localStorage.getItem("user")).Photo} alt="" />
                         </div>
                         <h5>{item.postedBy.name}</h5>
                         <div className="deletePost" onClick={() => { removePost(item._id) }}>
@@ -63,16 +63,16 @@ export default function PostDetail({ item, toggleDetails }) {
                         </div>
                     </div>
                     <div className="comment-section" style={{ borderBottom: "1px solid grey" }}>
-                        {
-                            item.comments.map((comment) => {
-                                return (
-                                    <p className="comm" key={comment._id}>
-                                        <span className="commenter">{ comment.postedBy.name} : </span>
-                                        <span className="commentText"> {comment.comment}</span>
-                                    </p>
-                                );
-                            })
-                        }
+                        {item.comments.map((comment) => {
+                            return (
+                                <p className="comm">
+                                    <span className="commenter" style={{ fontWeight: "bolder" }}>
+                                        {comment.postedBy.name} :
+                                    </span>
+                                    <span className="commentText">{comment.comment}</span>
+                                </p>
+                            );
+                        })}
                     </div>
                     <div className="card-content">
                         <p>{item.likes.length} likes</p>
