@@ -53,7 +53,7 @@ export default function PostDetail({ item, toggleDetails }) {
                 <div className="details">
                     <div className="card-header" style={{ borderBottom: "1px solid grey" }}>
                         <div className="card-pic">
-                            <img src="https://images.unsplash.com/photo-1605909145192-c8e361e3eda7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHx0b3BpYy1mZWVkfDIwfFM0TUtMQXNCQjc0fHxlbnwwfHx8fHw%3D" alt="" />
+                        <img src={JSON.parse(localStorage.getItem("user")).Photo} alt="" />
                         </div>
                         <h5>{item.postedBy.name}</h5>
                         <div className="deletePost" onClick={() => { removePost(item._id) }}>
@@ -66,8 +66,8 @@ export default function PostDetail({ item, toggleDetails }) {
                         {
                             item.comments.map((comment) => {
                                 return (
-                                    <p className="comm">
-                                        <span className="commenter">{comment.postedBy.name} : </span>
+                                    <p className="comm" key={comment._id}>
+                                        <span className="commenter">{ comment.postedBy.name} : </span>
                                         <span className="commentText"> {comment.comment}</span>
                                     </p>
                                 );

@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom"
 // import { cloudinary_cloud_name,cloudinary_upload_preset } from '../keys';
 
 export default function Createpost() {
+    var picLink = "https://static.vecteezy.com/system/resources/thumbnails/002/318/271/small/user-profile-icon-free-vector.jpg";
+
     const navigate = useNavigate();
     const [body, setBody] = useState("");
     const [image, setImage] = useState(null); // Changed to null initially
@@ -27,19 +29,19 @@ export default function Createpost() {
                     pic: url
                 })
             })
-            .then(res => res.json())
-            .then(data => {
-                if (data.error) {
-                    notifyA(data.error);
-                } else {
-                    notifyB("Successfully Posted");
-                    navigate("/");
-                }
-            })
-            .catch(err => {
-                console.log(err);
-                notifyA("Error while posting. Please try again.");
-            });
+                .then(res => res.json())
+                .then(data => {
+                    if (data.error) {
+                        notifyA(data.error);
+                    } else {
+                        notifyB("Successfully Posted");
+                        navigate("/");
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                    notifyA("Error while posting. Please try again.");
+                });
         }
     }, [url, body, navigate]);
 
@@ -54,12 +56,12 @@ export default function Createpost() {
                 method: "post",
                 body: data
             })
-            .then(res => res.json())
-            .then(data => setUrl(data.url))
-            .catch(err => {
-                console.log(err);
-                notifyA("Error uploading image. Please try again.");
-            });
+                .then(res => res.json())
+                .then(data => setUrl(data.url))
+                .catch(err => {
+                    console.log(err);
+                    notifyA("Error uploading image. Please try again.");
+                });
         } else {
             notifyA("Please select an image.");
         }
@@ -81,17 +83,17 @@ export default function Createpost() {
         <div className='createPost'>
             <div className="post-header">
                 <h4 style={{ margin: "3px auto" }}>Create new Post</h4>
-                <button id='post-btn' onClick={(e)=>{postDetails()}}>Share</button>
+                <button id='post-btn' onClick={(e) => { postDetails() }}>Share</button>
             </div>
             <div className="main-div">
-                <img id='output' src='' alt=''/>
+                <img id='output' src='' alt='' />
                 <input type="file" accept="image/*" onChange={loadFile} />
             </div>
             {/* Details  */}
             <div className="details">
                 <div className="card-header">
                     <div className="card-pic">
-                        <img src="https://images.unsplash.com/photo-1713664331413-271b72b31f61?q=80&w=1888&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" />
+                        <img src={JSON.parse(localStorage.getItem("user")).Photo} alt="" />
                     </div>
                     <h5>{JSON.parse(localStorage.getItem("user")).name}</h5>
                 </div>
