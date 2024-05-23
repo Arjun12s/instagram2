@@ -39,6 +39,14 @@ export default function Profile() {
     fetchUserData();
   }, []);
 
+  const renderMedia = (mediaUrl) => {
+    const fileType = mediaUrl.split('.').pop();
+    if (["mp4", "webm", "ogg"].includes(fileType)) {
+      return <video src={mediaUrl} controls className="media" />;
+    }
+    return <img src={mediaUrl} alt="post media" className="media" />;
+  };
+
   return (
     <div className="profile">
       {/* Profile frame */}
@@ -63,11 +71,12 @@ export default function Profile() {
       {/* POSTS Images  */}
       <div className="gallery">
         {pic.map((pics) => (
-          <img key={pics._id} src={pics.photo} onClick={() => { toggleDetails(pics); }} className="item" />
+          <div key={pics._id} onClick={() => { toggleDetails(pics); }} className="item">
+            {renderMedia(pics.photo)}
+          </div>
         ))}
       </div>
       {show && <PostDetail item={posts} toggleDetails={toggleDetails} />}
-
       {changePic && <ProfilePic changeprofile={fetchUserData} />}
     </div>
   );

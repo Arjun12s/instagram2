@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/home.css";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 
 export default function Home() {
-    var picLink = "https://static.vecteezy.com/system/resources/thumbnails/002/318/271/small/user-profile-icon-free-vector.jpg";
+    const picLink = "https://static.vecteezy.com/system/resources/thumbnails/002/318/271/small/user-profile-icon-free-vector.jpg";
     const navigate = useNavigate();
     const [data, setData] = useState([]);
     const [comment, setComment] = useState("");
     const [expandedText, setExpandedText] = useState({});
+    const videoRefs = useRef({});
 
     const notifyA = (msg) => toast.error(msg);
     const notifyB = (msg) => toast.success(msg);
@@ -21,7 +22,7 @@ export default function Home() {
         } else {
             fetchData();
         }
-    }, []);
+    }, [navigate]);
 
     const fetchData = () => {
         fetch(`/allposts`, {
@@ -118,13 +119,45 @@ export default function Home() {
         );
     };
 
+    const renderMedia = (mediaUrl, id) => {
+        const fileType = mediaUrl.split('.').pop();
+        if (["mp4", "webm", "ogg"].includes(fileType)) {
+            return (
+                <video
+                    key={id}
+                    src={mediaUrl}
+                    controls
+                    className="media"
+                    ref={(el) => { videoRefs.current[id] = el; }}
+                    autoPlay
+                    muted
+                    onClick={() => toggleVideoPlayPause(id)}
+                />
+            );
+        }
+        return <img src={mediaUrl} alt="post media" className="media" key={id} />;
+    };
+
+    const toggleVideoPlayPause = (id) => {
+        const video = videoRefs.current[id];
+        if (video) {
+            if (video.paused || video.ended) {
+                video.play();
+            } else {
+                video.pause();
+            }
+        }
+    };
+    
+    
+
     return (
         <div className="home">
             {data.length > 0 && data.map((post, index) => (
                 <div className="card" key={post._id}>
                     <div className="card-header">
                         <div className="card-pic">
-                            <img src={post.postedBy.Photo ? post.postedBy.Photo : picLink} alt="" />
+                            <img src={post.postedBy.Photo ? post.postedBy.Photo : picLink} alt="profile" />
                         </div>
                         <h5>
                             <Link to={`/profile/${post.postedBy._id}`} style={{ color: "black" }}>
@@ -132,8 +165,8 @@ export default function Home() {
                             </Link>
                         </h5>
                     </div>
-                    <div className="card-image">
-                        <img src={post.photo} alt="" />
+                    <div className="card-media">
+                        {renderMedia(post.photo, post._id)}
                     </div>
                     <div className="card-content">
                         {post.likes.includes(JSON.parse(localStorage.getItem("user"))._id) ? (
