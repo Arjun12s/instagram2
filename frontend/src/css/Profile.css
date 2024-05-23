@@ -1,6 +1,9 @@
 .profile {
     max-width: 600px;
     margin: 15px auto;
+    padding-top: 0px;
+    /* margin-top: #bb1717; */
+    border-top: 51px solid;
 }
 
 .profile-frame {
