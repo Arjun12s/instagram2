@@ -5,8 +5,7 @@ import { toast } from "react-toastify"
 import { Link } from "react-router-dom";
 
 export default function MyFollowingPost(){
-    var picLink = "https://static.vecteezy.com/system/resources/thumbnails/002/318/271/small/user-profile-icon-free-vector.jpg";
-
+    const picLink= "https://static.vecteezy.com/system/resources/thumbnails/002/318/271/small/user-profile-icon-free-vector.jpg"
     const navigate = useNavigate()
     const [data, setData] = useState([])
     const [comment, setComment] = useState([])

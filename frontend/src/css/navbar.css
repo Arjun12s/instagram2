@@ -1,39 +1,100 @@
-img{
-    /* padding: 17px; */
-    width: 10%;
-    object-fit: contain;
+/* src/css/navbar.css */
+
+.navbar {
+    width: 100%;
+    background: #fff;
 }
-.navbar{
+
+.nav-menu {
     display: flex;
     justify-content: space-around;
-    
-    box-shadow: 1px 2.5px 2px gray;
-
 }
-ul {
+
+.nav-mobile {
+    width: 100%;
+}
+
+.nav-top {
     display: flex;
-    align-items: baseline;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background: #fff;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    box-shadow: 0px 2px 5px #ccc;
+    z-index: 1000;
+}
 
+.nav-bottom {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    background: #fff;
+    width: 100%;
+    box-shadow: 0px -2px 5px #ccc;
+    z-index: 1000;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
 }
-a{
-    list-style: none;
-    text-decoration: none;
-    padding: 1px 15px;
-    color: black;
+
+.nav-bottom li {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
 }
-.primaryBtn{
+
+#insta-logo {
+    width: 50px;
+    height: auto;
+}
+
+.primaryBtn {
     cursor: pointer;
-    font-weight: bolder;
-    padding: 13px 25px;
-    border: none;
-    background:red;
-    color: white;
-    border-radius: 15px;
-    /* margin-left: 20px; */
-
 }
-.primaryBtn:hover{
-    transform:translateY(-2.5px);
-    box-shadow: black;
-    transition: all 0.25s ease-in;
+
+@media screen and (max-width: 800px) {
+    .nav-top {
+        display: flex;
+        align-items: center;
+        padding: 10px 10px;
+    }
+    
+    .nav-top ul {
+        display: flex;
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+    }
+    
+    .nav-top li {
+        margin: 0 10px; /* Increased spacing between list items */
+    }
+    
+    .nav-top a {
+        display: flex;
+        align-items: center;
+        margin-right: 0;
+        text-decoration: none;
+    }
+    
+    .nav-menu {
+        display: none;
+    }
+    
+    .nav-bottom {
+        display: flex;
+    }
+    
+    .navbar ul {
+        margin: 0;
+        padding: 10px 0;
+    }
+
 }

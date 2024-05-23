@@ -159,7 +159,7 @@ export default function Home() {
                         <div className="card-pic">
                             <img src={post.postedBy.Photo ? post.postedBy.Photo : picLink} alt="profile" />
                         </div>
-                        <h5>
+                        <h5 style={{textDecoration:"none"}}>
                             <Link to={`/profile/${post.postedBy._id}`} style={{ color: "black" }}>
                                 {post.postedBy.name}
                             </Link>
