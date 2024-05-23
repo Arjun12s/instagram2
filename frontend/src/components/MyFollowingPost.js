@@ -149,14 +149,14 @@ export default function MyFollowingPost(){
                             <img src={posts.postedBy.Photo ? posts.postedBy.Photo : picLink} alt="" />
                         </div>
                             <h5>
-                                <Link to={`/profile/${posts.postedBy._id}`}style={{color:"black"}}>
+                                <Link to={`/profile/${posts.postedBy._id}`}style={{color:"black",textDecoration:"none"}}>
                                     {posts.postedBy.name}
                                 </Link>
                             </h5>
                         </div>
 
                         {/* CARD IMAGE  */}
-                        <div className="card-image">
+                        <div className="card-media">
                             <img src={posts.photo} alt="" />
                         </div>
                         {/* CARD CONTENT */}

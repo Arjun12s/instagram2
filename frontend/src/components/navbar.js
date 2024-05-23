@@ -41,8 +41,8 @@ export default function Navbar({ login }) {
           <div className="nav-top">
             <img src={logo} alt="logo" id="insta-logo" />
             <ul>
-            <li><Link to="/notification"><span className="material-symbols-outlined" style={{textDecoration:"none"}}>notifications</span></Link></li>
-              <li><Link to="/message"><AiFillMessage style={{ fontSize:"24px" }} /></Link></li>
+            <li className="notification"><Link to="/notification"><span className="material-symbols-outlined" style={{textDecoration:"none"}}>notifications</span></Link></li>
+              <li className="msg"><Link to="/message"><AiFillMessage style={{ fontSize:"24px" }} /></Link></li>
               
             </ul>
           </div>
