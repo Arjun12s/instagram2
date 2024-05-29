@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import logo from "../image/logo.png";
 import "../css/Profile.css";
 import PostDetail from "./PostDetails";
 import ProfilePic from "./ProfilePic";
@@ -49,18 +48,15 @@ export default function Profile() {
 
   return (
     <div className="profile">
-      {/* Profile frame */}
       <div className="profile-frame">
-        {/* profile pic  */}
         <div className="profile-pic">
           <img onClick={changeProfile}
             src={user.Photo ? user.Photo : piclink} alt=""
           />
         </div>
-        {/* data  */}
         <div className="profile-data">
           <h1>{JSON.parse(localStorage.getItem("user")).name}</h1>
-          <div className="profile-info" style={{ display: "flex" }}>
+          <div className="profile-info">
             <p>{pic ? pic.length : "0"} posts</p>
             <p>{user.followers ? user.followers.length : "0"} followers</p>
             <p>{user.followING ? user.followING.length : "0"} following</p>
@@ -68,7 +64,6 @@ export default function Profile() {
         </div>
       </div>
       <hr style={{ width: "90%", margin: "20px auto", opacity: "0.8" }} />
-      {/* POSTS Images  */}
       <div className="gallery">
         {pic.map((pics) => (
           <div key={pics._id} onClick={() => { toggleDetails(pics); }} className="item">

@@ -14,6 +14,8 @@ app.use(express.json());
 // Importing models and routes
 require('./modals/modal');
 require('./modals/post');
+require('./modals/MessageModal');
+require('./modals/chatmodel');
 app.use(require('./routes/auth'));
 app.use(require('./routes/createPost'));
 app.use(require('./routes/user'));

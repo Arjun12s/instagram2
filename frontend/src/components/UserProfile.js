@@ -1,38 +1,34 @@
 import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import "../css/Profile.css";
-// import PostDetail from "./PostDetail";
-import { useParams } from "react-router-dom";
 
 export default function UserProfile() {
-    // const piclink = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhcdVEzoVWLyCqD6wPIyxnxW3L2lYNzsmrGHK-A-tGxA&s';
-  
-    var picLink = "https://static.vecteezy.com/system/resources/thumbnails/002/318/271/small/user-profile-icon-free-vector.jpg"
+    const defaultPicLink = "https://static.vecteezy.com/system/resources/thumbnails/002/318/271/small/user-profile-icon-free-vector.jpg";
     const { userid } = useParams();
+    const navigate = useNavigate();
     const [user, setUser] = useState("");
     const [posts, setPosts] = useState([]);
-    const [isfollow, setIsFollow] = useState(false);
-    // TO FOLLOW USER 
+    const [isFollow, setIsFollow] = useState(false);
+
     const followUser = (userId) => {
         fetch(`/follow`, {
-            method: "put",
+            method: "PUT",
             headers: {
                 "Content-Type": "application/json",
                 Authorization: "Bearer " + localStorage.getItem("jwt")
             },
-            body: JSON.stringify({
-                followId: userId
-            })
+            body: JSON.stringify({ followId: userId })
         })
-        .then((res) => res.json())  // Return the promise here
+        .then((res) => res.json())
         .then((data) => {
-            console.log(data);       // Now this will log the actual data
+            console.log(data);
             setIsFollow(true);
         })
         .catch((error) => {
             console.error('Error:', error);
         });
     };
-    
+
     const unfollowUser = (userId) => {
         fetch(`/unfollow`, {
             method: "PUT",
@@ -40,26 +36,22 @@ export default function UserProfile() {
                 "Content-Type": "application/json",
                 Authorization: "Bearer " + localStorage.getItem("jwt")
             },
-            body: JSON.stringify({
-                followId: userId
-            })
+            body: JSON.stringify({ followId: userId })
         })
         .then((res) => {
             if (!res.ok) {
                 throw new Error('Network response was not ok ' + res.statusText);
             }
-            return res.json();  // Return the promise here
+            return res.json();
         })
         .then((data) => {
-            console.log(data);  // Now this will log the actual data
+            console.log(data);
             setIsFollow(false);
         })
         .catch((error) => {
             console.error('Error:', error);
         });
     };
-    
-    
 
     useEffect(() => {
         fetch(`/user/${userid}`, {
@@ -69,53 +61,72 @@ export default function UserProfile() {
         })
         .then(res => res.json())
         .then((result) => {
-            console.log(result)
+            console.log(result);
             setUser(result.user);
             setPosts(result.posts);
-            if(result.user.followers.includes(JSON.parse(localStorage.getItem("user"))._id)){
-                setIsFollow(true)
+            if (result.user.followers.includes(JSON.parse(localStorage.getItem("user"))._id)) {
+                setIsFollow(true);
+            } else {
+                setIsFollow(false);
             }
         })
         .catch(error => console.error("Error fetching user profile:", error));
-    }, [
-        isfollow
-    ]);
+    }, [userid]); // Include userid in the dependency array
+
+    const renderMedia = (mediaUrl) => {
+        const fileType = mediaUrl.split('.').pop();
+        if (["mp4", "webm", "ogg"].includes(fileType)) {
+            return <video src={mediaUrl} controls className="media" />;
+        }
+        return <img src={mediaUrl} alt="post media" className="media" />;
+    };
+
+    const messageUser = () => {
+        // Navigate to the messaging interface with the user
+        navigate(`/ChatPages/${userid}`);
+    };
 
     return (
         <div className="profile">
             <div className="profile-frame">
                 <div className="profile-pic">
-                <img src={user.Photo ? user.Photo : picLink} alt="" />
+                    <img src={user.Photo || defaultPicLink} alt="" />
                 </div>
                 <div className="profile-data">
-                    <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-                    <h1>{user.name}</h1>
-                    <button className="followBtn"
-                     onClick={()=>{
-                        if(isfollow){
-                        unfollowUser(user._id)
-                    }else{
-                        followUser(user._id)
-                    }
-                    }}
-                    >
-                       {isfollow ? "Unfollow":"Follow"}
-                    </button>
+                    <div style={{ display: "block", alignItems: "center", justifyContent: "space-between" }}>
+                        <h1>{user.name}</h1>
+                        <div>
+                            <div className="btns">
+                            <button className="followBtn" onClick={() => {
+                                if (isFollow) {
+                                    unfollowUser(user._id);
+                                } else {
+                                    followUser(user._id);
+                                }
+                            }}>
+                                {isFollow ? "Unfollow" : "Follow"}
+                            </button>
+                            <button className="messageBtn" onClick={messageUser}>
+                                Message
+                            </button>
+                            </div>
+                        </div>
                     </div>
-                    
                     <div className="profile-info" style={{ display: "flex" }}>
                         <p>{posts.length} POSTS</p>
-                        <p>{user.followers?user.followers.length:"0"} FOLLOWERS</p>
-                        <p>{user.following?user.following.length:"0"} FOLLOWING</p>
+                        <p>{user.followers ? user.followers.length : "0"} FOLLOWERS</p>
+                        <p>{user.following ? user.following.length : "0"} FOLLOWING</p>
                     </div>
                 </div>
             </div>
-            < hr style={{ width: "90%", margin: "15px auto", opacity: "0.8" }} />
+            <hr style={{ width: "90%", margin: "15px auto", opacity: "0.8" }} />
             <div className="gallery">
                 {posts && posts.map((pics) => (
-                    <img key={pics._id} src={pics.photo} className="item" alt="Post" />
+                    <div key={pics._id} className="item">
+                        {renderMedia(pics.photo)}
+                    </div>
                 ))}
             </div>
         </div>
     );
-                }
+}

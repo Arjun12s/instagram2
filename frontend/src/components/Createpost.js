@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom"
 // import { cloudinary_cloud_name,cloudinary_upload_preset } from '../keys';
 
 export default function Createpost() {
-    var picLink = "https://static.vecteezy.com/system/resources/thumbnails/002/318/271/small/user-profile-icon-free-vector.jpg";
+    // var picLink = "https://static.vecteezy.com/system/resources/thumbnails/002/318/271/small/user-profile-icon-free-vector.jpg";
 
     const navigate = useNavigate();
     const [body, setBody] = useState("");

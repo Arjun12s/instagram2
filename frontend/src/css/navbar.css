@@ -1,17 +1,37 @@
-/* src/css/navbar.css */
-
 .navbar {
-    width: 100%;
     background: #fff;
+    /* border-bottom: 2px solid; */
+    padding-top: 25px;
+    width: 100%;
+    height: 60px;
+
+}
+.navbar img{
+    height: 40px;
+    width: 200px;
 }
 
 .nav-menu {
     display: flex;
     justify-content: space-around;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-menu li {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    font-size: 20px
+}
+.nav-menu a {
+    text-decoration: none;
 }
 
 .nav-mobile {
     width: 100%;
+    display: none;
 }
 
 .nav-top {
@@ -51,14 +71,30 @@
 }
 
 #insta-logo {
-    width: 50px;
+    width: 170px;
     height: auto;
 }
 
 .primaryBtn {
     cursor: pointer;
+    background-color: red;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    text-align: center;
+    padding: 7px 12px;
+    border-radius: 10px;
 }
 
+.primaryBtn:hover {
+    background-color: black;
+    
+    color: #fff;
+    cursor: pointer;
+    text-align: center;
+    padding: 7px 12px;
+    border-radius: 10px;
+}
 @media screen and (max-width: 800px) {
     .nav-top {
         display: flex;
@@ -72,7 +108,13 @@
         padding: 0;
         list-style-type: none;
     }
-    
+    .navbar {
+        background: #fff;
+        /* border-bottom: 2px solid; */
+        height: 40px;
+        padding-top: 26px;
+        width: 100%;
+    }
     .nav-top li {
         margin: 0 10px; /* Increased spacing between list items */
     }
@@ -88,6 +130,10 @@
         display: none;
     }
     
+    .nav-mobile {
+        display: block;
+    }
+    
     .nav-bottom {
         display: flex;
         justify-content: space-evenly;
@@ -97,13 +143,27 @@
         margin: 0;
         padding: 10px 0;
     }
-    .msg{
-        /* border: 2px solid black; */
+    
+    .material-symbols-outlined-log,
+    .primaryBtnlogout {
+        cursor: pointer;
+    }
+    
+    .primaryBtn {
+        background-color: white; /* Changed background to white */
+        border: none;
+        color: #000; /* Changed text color to black for visibility */
+        text-align: center;
+        padding: 7px 12px;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+    
+    .msg {
         padding-right: 15px;
     }
-    .notification{
-        /* border: 2px solid black; */
+    
+    .notification {
         padding-left: 5px;
     }
-
 }

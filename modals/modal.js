@@ -24,5 +24,5 @@ const userSchema= new mongoose.Schema({
     following:[{type:ObjectId,ref:"USER"}]
 
 
-})
+}, { timestamps: true })
 mongoose.model("USER",userSchema)

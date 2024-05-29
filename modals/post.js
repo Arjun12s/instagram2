@@ -23,15 +23,7 @@ const postSchema = new mongoose.Schema({
             ref: "USER"
         }
     }],
-    messages: [{
-        message: {
-            type: String
-        },
-        sender: {
-            type: ObjectId,
-            ref: "USER"
-        }
-    }],
+   
     postedBy: {
         type: ObjectId,
         ref: "USER"
