@@ -159,13 +159,12 @@
 
 
 .msgbox {
+    /* display: flex;
+    flex-direction: column; */
     display: flex;
     flex-direction: column;
-    align-items: center;
     width: 100%;
-    height: 100vh;
-    padding: 20px;
-    box-sizing: border-box;
+    height: 80%;
 }
 
 .insidemsgbox {

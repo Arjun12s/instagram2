@@ -29,7 +29,7 @@ const Message = () => {
                 console.error('Error fetching conversations:', error);
             }
         };
-    
+
         fetchConversations();
     }, []);
 
@@ -58,13 +58,13 @@ const Message = () => {
                 Authorization: "Bearer " + localStorage.getItem("jwt"),
             },
         })
-        .then((res) => res.json())
-        .then((result) => {
-            setUser(result.user);
-        })
-        .catch((error) => {
-            console.error('Error fetching user data:', error);
-        });
+            .then((res) => res.json())
+            .then((result) => {
+                setUser(result.user);
+            })
+            .catch((error) => {
+                console.error('Error fetching user data:', error);
+            });
     };
 
     useEffect(() => {
@@ -103,13 +103,21 @@ const Message = () => {
             }
     
             const resData = await res.json();
-            setMessages((prevMessages) => [...prevMessages, resData.newMessage]); // Append new message to the array
+            console.log("Message sent successfully:", resData.newMessage);
+            
+            // Assuming resData.newMessage contains the new message object
+            setMessages((prevMessages) => {
+                const updatedMessages = [...prevMessages, resData.newMessage];
+                console.log("Updated messages:", updatedMessages);
+                return updatedMessages;
+            });
             setCurrentMessage(""); // Clear the input field
         } catch (error) {
             console.error('Error sending message:', error);
         }
     };
     
+
 
     return (
         <div className='OuterRange'>
@@ -143,25 +151,24 @@ const Message = () => {
                 {receiver?.name && (
                     <div className="UserMESSAGE">
                         <div className='profile-pic'><img src={receiver?.Photo || piclink} alt="receiver" /></div>
-                        <h3 className="NAME" style={{color:"red"}}>{receiver?.name}</h3>
+                        <h3 className="NAME" style={{ color: "red" }}>{receiver?.name}</h3>
                         <p className="ACCOUNT_Status">ACTIVE</p>
                     </div>
                 )}
                 <div className='msgbox'>
-                    
                     <div className='insidemsgbox'>
-                    {messages.length > 0 ? (
-    messages.map(({ message, senderId }, index) => (
-        <div key={index} className={` ${senderId === user._id ? 'outmsg' : 'inmsg'}`}>
-            {message}
-        </div>
-    ))
-) : (
-    <div style={{ background: "red", fontSize: "14px" }}>No messages</div>
-)}
-
+                        {messages.length > 0 ? (
+                            messages.map(({ message, senderId }, index) => (
+                                <div key={index} className={`${senderId === user._id ? 'outmsg' : 'inmsg'}`}>
+                                    {message}
+                                </div>
+                            ))
+                        ) : (
+                            <div style={{ background: "red", fontSize: "14px" }}>No messages</div>
+                        )}
                     </div>
                 </div>
+
                 <div className="typing-Area">
                     <div className="selectfiles">
                         <span className="material-symbols-outlined">add_circle</span>

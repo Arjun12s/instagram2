@@ -4,8 +4,13 @@ const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
 require('dotenv').config();
+const http = require('http'); // Import http
+const { Server } = require('socket.io'); // Import from socket.io
 
 const app = express();
+const server = http.createServer(app); // Create HTTP server
+const io = new Server(server); // Initialize socket.io server with HTTP server
+
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
@@ -14,17 +19,15 @@ app.use(express.json());
 // Importing models and routes
 require('./modals/modal');
 require('./modals/post');
-require('./modals/Message')
-require('./modals/conversation')
-// require('./modals/MessageModal');
-// require('./modals/chatmodel');
+require('./modals/Message');
+require('./modals/conversation');
 app.use(require('./routes/auth'));
 app.use(require('./routes/createPost'));
 app.use(require('./routes/user'));
 
 // MongoDB connection
 const { mongoURL } = require('./keys');
-mongoose.connect(mongoURL)
+mongoose.connect(mongoURL, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     console.log('Successfully connected to MongoDB');
   })
@@ -35,6 +38,22 @@ mongoose.connect(mongoURL)
 // Serving the frontend
 const frontendBuildPath = path.join(__dirname, 'frontend', 'build');
 console.log('Frontend build path:', frontendBuildPath);
+
+io.on('connection', (socket) => {
+  console.log('a user connected');
+  
+  socket.on('join_conversation', (conversationId) => {
+      socket.join(conversationId);
+  });
+
+  socket.on('send_message', (newMessage) => {
+      io.to(newMessage.conversationId).emit('receive_message', newMessage);
+  });
+
+  socket.on('disconnect', () => {
+      console.log('user disconnected');
+  });
+});
 
 // Log the contents of the frontend build directory
 fs.readdir(frontendBuildPath, (err, files) => {
@@ -50,7 +69,7 @@ app.use(express.static(frontendBuildPath));
 
 // Serve index.html for all routes
 app.get('*', (req, res) => {
-  res.sendFile(path.join(frontendBuildPath, `index.html`), (err) => {
+  res.sendFile(path.join(frontendBuildPath, 'index.html'), (err) => {
     if (err) {
       console.error('Error serving index.html:', err);
       res.status(err.status || 500).send('Error: Unable to serve index.html');
@@ -59,6 +78,6 @@ app.get('*', (req, res) => {
 });
 
 // Start the server
-app.listen(PORT, () => {
+server.listen(PORT, () => { // Use server.listen instead of app.listen
   console.log('Listening on port ' + PORT);
 });
