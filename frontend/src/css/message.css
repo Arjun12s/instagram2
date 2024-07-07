@@ -1,67 +1,197 @@
-/* message.css */
-
-.message-container {
+.OuterRange {
+    width: 100%;
     display: flex;
-    flex-direction: column;
-    height: 100%;
 }
 
-.message-header {
-    background-color: #4267B2; /* Facebook blue */
-    color: white;
+.layer1 {
+    width: 35%;
+    height: 640px;
+    /* border: 2px solid black; */
+    background: #e1e1ef;
+}
+
+.layer2 {
+    width: 65%;
+    height: 640px;
+    border-left: 1px solid gray;
+    /* border: 2px solid black; */
+    background-color: #e2e2e1;
+}
+
+.layer3 {
+    width: 25%;
+    height: 640px;
+    border: 2px solid black;
+}
+
+.profile-pic > img {
+    height: 60px;
+    width: 60px;
+    display: flex;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #fff;
+}
+
+.NAME {
+    margin-top: -58px;
+    margin-left: -80px;
+}
+
+.MY_ACCOUNT {
+    margin-top: -15px;
+    margin-left: -69px;
+    font-size: 12px;
+}
+
+.UserMESSAGE {
+    width: 99%;
+    background: grey;
+    height: 50px;
+    display: inline-block;
+    border-radius: 15px;
+}
+
+.UserMESSAGE > .profile-pic > img {
+    border: 2px solid #fff;
+    border-radius: 50%;
+    display: flex;
+    height: 34px;
+    object-fit: cover;
+    width: 35px;
+}
+
+.UserMESSAGE > .NAME {
+    font-size: 22px;
+    margin-left: -430px;
+    margin-top: -48px;
+}
+
+.UserMESSAGE > .ACCOUNT_Status {
+    font-size: smaller;
+    margin-left: -452px;
+    margin-top: -25px;
+}
+
+.material-symbols-outlined {
+    display: inline;
+    padding: 6px 6px;
+}
+
+.material-symbols-outlined:hover {
+    display: inline;
+    background: #c4cbcf;
+    border-radius: 100%;
+    padding: 6px 6px;
+}
+
+.msgbox {
+    border: 0px solid black;
+    background: yellow;
+    height: 80%;
+    width: 100%;
+    margin-top: 6px;
+    border-radius: 10px;
+    overflow: scroll;
+    scrollbar-width: none;
+}
+
+.inmsgbx {
+    max-height: fit-content;
+    max-width: 40%;
+    margin-top: 10px;
+    margin-left: 5px;
+    background: cornsilk;
+    border-radius: 0px 100px 0px 100px;
     padding: 10px;
-    text-align: center;
+    font-size: 12px;
 }
 
-.message-history {
-    flex: 1;
-    overflow-y: auto;
+.inmsgbx1 {
+    background: blue;
+    border-radius: 100px 0px 100px 0px;
+    max-height: fit-content;
+    margin-top: 10px;
+    max-width: 40%;
+    margin-left: auto;
     padding: 10px;
+    font-size: 12px;
 }
 
-.message-incoming {
-    background-color: #f0f0f0;
-    color: #333;
-    padding: 8px;
-    border-radius: 8px;
-    margin-bottom: 10px;
-    max-width: 70%;
-    align-self: flex-start;
-}
-
-.message-outgoing {
-    background-color: #4267B2; /* Facebook blue */
-    color: white;
-    padding: 8px;
-    border-radius: 8px;
-    margin-bottom: 10px;
-    max-width: 70%;
-    align-self: flex-end;
-}
-
-.message-input {
+.typing-Area {
     display: flex;
     align-items: center;
-    padding: 10px;
+    padding: 4px;
+    width: 100%;
 }
 
-.message-input input[type="text"] {
-    flex: 1;
-    padding: 8px;
-    border-radius: 20px;
-    border: 1px solid #ccc;
+.typing-Area .selectfiles {
     margin-right: 10px;
 }
 
-.message-input button {
-    background-color: #4267B2; /* Facebook blue */
-    color: white;
-    border: none;
-    padding: 8px 20px;
-    border-radius: 20px;
-    cursor: pointer;
+.typing-Area .selectfiles .material-symbols-outlined {
+    font-size: 24px;
 }
 
-.message-input button:hover {
-    background-color: #365899; /* Darker shade of Facebook blue */
+.typing-Area .textInput {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.typing-Area .textInput input {
+    border: none;
+    border-radius: 10px;
+    box-sizing: border-box;
+    font-size: 16px;
+    outline: none;
+    padding: 10px;
+    width: 100%;
+}
+
+.typing-Area .SendBtn {
+    margin-left: 10px;
+    font-size: 24px;
+}
+.search-container{
+    padding: 0px;
+}
+
+
+.msgbox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.insidemsgbox {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 100%;
+}
+
+.inmsg {
+    align-self: flex-start;
+    background-color: #d7ffbc;
+    border-radius: 0px 5px 5px 20px;
+    width: 45%;
+    display: flex;
+    margin: 1% 1% 2% 2%;
+    /* border-radius: 5px 18px 5px 5px; */
+    padding: 10px;
+}
+
+.outmsg {
+    align-self: flex-end;
+    background-color: #dcf8c6;
+    width: 45%;
+    display: flex;
+    margin: 1% 2% 2% 1%;
+    border-radius: 5px 5px 5px 18px;
+    padding: 10px;
 }

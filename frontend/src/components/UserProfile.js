@@ -52,7 +52,13 @@ export default function UserProfile() {
             console.error('Error:', error);
         });
     };
-
+    const renderMedia = (mediaUrl) => {
+        const fileType = mediaUrl.split('.').pop();
+        if (["mp4", "webm", "ogg"].includes(fileType)) {
+            return <video src={mediaUrl} controls className="media" />;
+        }
+        return <img src={mediaUrl} alt="post media" className="media" />;
+    };
     useEffect(() => {
         fetch(`/user/${userid}`, {
             headers: {
@@ -71,19 +77,28 @@ export default function UserProfile() {
             }
         })
         .catch(error => console.error("Error fetching user profile:", error));
-    }, [userid]); // Include userid in the dependency array
-
-    const renderMedia = (mediaUrl) => {
-        const fileType = mediaUrl.split('.').pop();
-        if (["mp4", "webm", "ogg"].includes(fileType)) {
-            return <video src={mediaUrl} controls className="media" />;
-        }
-        return <img src={mediaUrl} alt="post media" className="media" />;
-    };
+    }, [userid]);
 
     const messageUser = () => {
-        // Navigate to the messaging interface with the user
-        navigate(`/ChatPages/${userid}`);
+        const senderId = JSON.parse(localStorage.getItem("user"))._id;
+        const receiverId = userid;
+
+        fetch(`/conversation`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + localStorage.getItem("jwt")
+            },
+            body: JSON.stringify({ senderId, receiverId })
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            console.log(data);
+            navigate(`/message/${data.conversationId}`);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
     };
 
     return (
@@ -97,18 +112,18 @@ export default function UserProfile() {
                         <h1>{user.name}</h1>
                         <div>
                             <div className="btns">
-                            <button className="followBtn" onClick={() => {
-                                if (isFollow) {
-                                    unfollowUser(user._id);
-                                } else {
-                                    followUser(user._id);
-                                }
-                            }}>
-                                {isFollow ? "Unfollow" : "Follow"}
-                            </button>
-                            <button className="messageBtn" onClick={messageUser}>
-                                Message
-                            </button>
+                                <button className="followBtn" onClick={() => {
+                                    if (isFollow) {
+                                        unfollowUser(user._id);
+                                    } else {
+                                        followUser(user._id);
+                                    }
+                                }}>
+                                    {isFollow ? "Unfollow" : "Follow"}
+                                </button>
+                                <button className="messageBtn" onClick={messageUser}>
+                                    Message
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -130,3 +145,5 @@ export default function UserProfile() {
         </div>
     );
 }
+
+

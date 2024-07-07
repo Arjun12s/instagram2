@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const { ObjectId } = mongoose.Schema.Types;
 
 const postSchema = new mongoose.Schema({
@@ -23,7 +23,6 @@ const postSchema = new mongoose.Schema({
             ref: "USER"
         }
     }],
-   
     postedBy: {
         type: ObjectId,
         ref: "USER"

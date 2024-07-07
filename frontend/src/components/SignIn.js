@@ -40,12 +40,13 @@ export default function SignIn() {
                 if (data.error) {
                     notifyA(data.error)
                 } else {
+                    navigate(`/profile`)
                     notifyB("Signed in succesfully")
                     console.log(data)
                     localStorage.setItem("jwt",data.token)
                     localStorage.setItem("user",JSON.stringify(data.user))
                     setuserLogin(true)
-                    navigate("/")
+                    
                 }
 
                 console.log(data)

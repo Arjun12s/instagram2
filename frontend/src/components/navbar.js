@@ -17,7 +17,7 @@ export default function Navbar({ login }) {
           <Link to="/profile"><li key="profile">Profile</li></Link>
           <Link to="/createPost"><li key="createPost">Create Post</li></Link>
           <Link to="/followingpost"><li key="followingPost">Following</li></Link>
-          <Link to="/ChatPages"><li key="message">Message</li></Link>
+          <Link to="/Message"><li key="message">Message</li></Link>
           <Link to="/search"><li key="search">Search</li></Link>
           <li><button className="primaryBtn" onClick={() => setModalOpen(true)} style={{fontSize:"20px"}}>Log Out</button></li>
           <Link to="/notification"><li key="notification">Notifications</li></Link>

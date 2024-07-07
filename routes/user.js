@@ -1,15 +1,12 @@
 const express = require("express");
-const app = express();
 const router = express.Router();
 const mongoose = require('mongoose');
-const requireLogin = require("../middelwares/requireLogin");
+const requireLogin = require("../middlewares/requireLogin");
 const POST = mongoose.model("POST");
 const USER = mongoose.model("USER");
-const Chat = mongoose.model("Chat")
-const Message = mongoose.model("Message")
-// const cors = require('cors');
-// app.use(cors());
-// const user=USER
+const CONVERSATION = mongoose.model("CONVERSATION");
+const MSG = mongoose.model("MSG");
+
 // TO GET USER PROFILE 
 router.get("/user/:id", (req, res) => {
     USER.findOne({ _id: req.params.id })
@@ -32,22 +29,17 @@ router.get("/user/:id", (req, res) => {
         });
 });
 
-
 // FOLLOW USER
 router.put("/follow", requireLogin, async (req, res) => {
     try {
-        // Update the Post document to add follower
         const post = await USER.findByIdAndUpdate(
             req.body.followId,
-            // console.log({followers: req.user._id }),
             { $push: { followers: req.user._id } },
             { new: true }
         ).exec();
 
-        // Update the current user's following list
         const user = await USER.findByIdAndUpdate(
             req.user._id,
-            // console.log({following: req.body.followId }),
             { $push: { following: req.body.followId } },
             { new: true }
         ).exec();
@@ -62,14 +54,12 @@ router.put("/follow", requireLogin, async (req, res) => {
 // UNFOLLOW USER
 router.put("/unfollow", requireLogin, async (req, res) => {
     try {
-        // Update the Post document to remove follower
         const post = await USER.findByIdAndUpdate(
             req.body.followId,
             { $pull: { followers: req.user._id } },
             { new: true }
         ).exec();
 
-        // Update the current user's following list
         const user = await USER.findByIdAndUpdate(
             req.user._id,
             { $pull: { following: req.body.followId } },
@@ -82,7 +72,6 @@ router.put("/unfollow", requireLogin, async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
-
 
 // TO UPLOAD PROFILE PIC
 router.put("/uploadProfilePic", requireLogin, (req, res) => {
@@ -99,10 +88,7 @@ router.put("/uploadProfilePic", requireLogin, (req, res) => {
         });
 });
 
-
-
-
-/// ROUTER to Search for all users
+// ROUTER to Search for all users
 router.get("/searchUsers", requireLogin, async (req, res) => {
     try {
         const keyword = req.query.search ? {
@@ -112,164 +98,94 @@ router.get("/searchUsers", requireLogin, async (req, res) => {
             ]
         } : {};
 
-        const users = await USER.find(keyword).find({ _id: { $ne: req.user._id } });
-        console.log(users)
-        res.send(users);
+        const users = await USER.find({ ...keyword, _id: { $ne: req.user._id } });
+        res.json(users);
     } catch (error) {
         console.error('Error searching users:', error);
         res.status(500).json({ error: 'Server error' });
     }
 });
 
+// Create a conversation or fetch existing one
+// CREATE A CONVERSATION
+router.post(`/conversation`, requireLogin, async (req, res) => {
+    try {
+        const { senderId, receiverId } = req.body;
 
-router.post(`/accesschat`, requireLogin, async (req, res) => {
-    const { userId } = req.body
-    if (!userId) {
-        console.log("userId param not sent with request");
-        return res.sendStatus(400);
-    }
-    var isChat = await Chat.find({
-        isGroupChat: false, $and: [
-            { users: { $elemMatch: { $eq: req.user._id } } },
-            { users: { $elemMatch: { $eq: userId } } },
-        ],
-    }).populate("users", "-password -email")
-        .populate("latestMessage")
+        // Check if a conversation already exists
+        let conversation = await CONVERSATION.findOne({
+            members: { $all: [senderId, receiverId] }
+        });
 
-    isChat = await USER.populate(isChat, {
-        path: "latestMessage.sender", select: "name Photo userName",
-    });
-    if (isChat.length > 0) {
-        res.send(isChat[0]);
-    } else {
-        var chatData = {
-            chatName: "sender",
-            isGroupChat: false,
-            users: [req.user._id, userId],
-
-        };
-        try {
-            const createdChat = await Chat.create(chatData);
-            const fullChat = await Chat.findOne({ _id: createdChat._id }).populate("users", "-password -email");
-            res.status(200).send(fullChat)
-        } catch (error) {
-            res.status(400);
-            throw new Error(error.message);
+        if (!conversation) {
+            conversation = new CONVERSATION({ members: [senderId, receiverId] });
+            await conversation.save();
         }
+
+        res.status(200).json({ conversationId: conversation._id });
+    } catch (error) {
+        console.error("Error creating conversation:", error);
+        res.status(500).json({ error: "Server error" });
     }
-})
+});
 
-
-
-router.get(`/fetchats`, requireLogin, async (req, res) => {
+// GET CONVERSATIONS FOR A USER
+router.get(`/conversation/:userid`, requireLogin, async (req, res) => {
     try {
-        Chat.find({ users: { $elemMatch: { $eq: req.user._id } } })
-            .populate("users", "-password -email")
-            .populate("groupAdmin", "-password -email")
-            .populate("latestMessage", "-password")
-            .sort({ updatedAt: -1 })
-            .then(async (results) => {
-                results = await USER.populate(isChat, {
-                    path: "latestMessage.sender", select: "name Photo userName",
-                });
-                res.status(200).send(results);
+        const userId = req.params.userid;
 
+        const conversations = await CONVERSATION.find({ members: userId });
 
+        // Fetch user data along with each conversation
+        const conversationUserData = await Promise.all(
+            conversations.map(async (conversation) => {
+                const receiverId = conversation.members.find((member) => member !== userId);
+                const user = await USER.findById(receiverId).select("name email Photo");
+                return { user, conversationId: conversation._id };
             })
+        );
+
+        res.status(200).json(conversationUserData);
     } catch (error) {
-        res.status(400);
-        throw new Error(error.message);
+        console.error("Error fetching conversations:", error);
+        res.status(500).json({ error: "Internal server error" });
     }
-})
+});
 
-router.post(`/createGrp`, requireLogin,async (req, res) =>{
-    if(!req.body.users || !req.body.name){
-        return res.status(400).send({message:"Please fill allthe fields"})
-
-    }
-    var users=JSON.parse(req.body.users)
-    if(users.length<2){
-        return res.status(400).send("there should be more than 2 users to create a group")
-    }
-    users.push(req.user)
-
+// Send a message
+router.post('/message', requireLogin, async (req, res) => {
     try {
-        const grpChat=await Chat.create({
-            chatName:req.body.name,
-            users:users,
-            isGroupChat:true,
-            groupAdmin:req.user,
-        })
-        const fullGroupChat=await Chat.findOne({ _id: createdChat._id }).populate("users", "-password -email")
-        .populate("groupAdmin", "-password -email");
+        const { conversationId, message } = req.body;
+        const senderId = req.user._id;
+
+        if (!senderId || !conversationId || !message) {
+            return res.status(400).json({ error: 'Please provide senderId, conversationId, and message' });
+        }
+
+        const newMessage = new MSG({ conversationId, senderId, message });
+        await newMessage.save();
+
+        // res.status(200).json({  newMessage });
     } catch (error) {
-        res.status(400);
-        throw new Error(error.message);
+        console.error('Error sending message:', error);
+        res.status(500).json({ error: 'Internal server error' });
     }
-})
-router.put(`/renameGrp`, requireLogin,requireLogin,async (req, res) =>{
-    const {chatId,chatName}=req.body;
-    const updatedChat=await Chat.findByIdAndUpdate(
-        chatId,{
-            chatName       },{
-                new:true
-            }
-    ).populate("users", "-password -email")
-    .populate("groupAdmin", "-password -email");
+});
 
-    if (!updatedChat) {
-        res.status(404);
-        throw new Error("chat not found")
+// Fetch messages for a conversation
+router.get('/message/:conversationId', requireLogin, async (req, res) => {
+    try {
+        const conversationId = req.params.conversationId;
+        const messages = await MSG.find({ conversationId });
+
+        if (!messages || messages.length === 0) {
+            return res.status(404).json({ error: 'No messages found for this conversation' });
+        }
+
+        res.status(200).json(messages);
+    } catch (error) {
+        console.error('Error fetching messages:', error);
+        res.status(500).json({ error: 'Internal server error' });
     }
-    else{
-        res.json(updatedChat)
-    }
-})
-
-
-
-
-
-router.put(`/removefromGrp`, requireLogin ,requireLogin,async (req, res) =>{
-    const {chatId,userId}=req.body;
-
-    const removed= await Chat.findByIdAndUpdate(chatId,{
-        $pull:{users:userId},
-        
-    },{new:true}).populate("users", "-password -email")
-    .populate("groupAdmin", "-password -email");
-
-    if (!removed) {
-        res.status(404);
-        throw new Error("chat not found")
-    }
-    else{
-        console.log(removed)
-        res.json(removed)   
-    }
-})
-router.put(`/addToGrp`, requireLogin,requireLogin,async (req, res) =>{
-    const {chatId,userId}=req.body;
-
-    const added= await Chat.findByIdAndUpdate(chatId,{
-        $push:{users:userId},
-        
-    },{new:true}).populate("users", "-password -email")
-    .populate("groupAdmin", "-password -email");
-
-    if (!added) {
-        res.status(404);
-        throw new Error("chat not found")
-    }
-    else{
-        console.log(added)
-        res.json(added)   
-    }
-})
-
-
-
-
-
-
+});
 module.exports = router;

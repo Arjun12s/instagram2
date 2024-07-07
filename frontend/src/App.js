@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
 import Navbar from './components/navbar';
-// import  { Message } from './components/message';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import SignUp from './components/SignUp';
 import SignIn from './components/SignIn';
@@ -16,7 +15,7 @@ import Modal from './components/Modal';
 import UserProfile from './components/UserProfile';
 import MyFollowingPost from './components/MyFollowingPost';
 import Search from './components/Search';
-import ChatPages from './components/ChatPages';
+import Message from './components/Message';
 
 function App() {
   const [userLogin, setUserLogin] = useState(false);
@@ -32,7 +31,7 @@ function App() {
             <Route path='/signup' element={<SignUp />} />
             <Route path='/signin' element={<SignIn />} />
             <Route path='/profile' element={<Profile />} />
-            <Route path='/ChatPages' element={<ChatPages/>} Component={ChatPages} />
+            <Route path='/Message' element={<Message />} />
             <Route path='/notification' element={<Notify />} />
             <Route path='/followingpost' element={<MyFollowingPost />} />
             <Route path='/profile/:userid' element={<UserProfile />} />

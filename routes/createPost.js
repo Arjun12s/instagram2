@@ -148,4 +148,42 @@ router.get("/myfollowingpost", requireLogin, (req, res) => {
         });
 });
 
+
+
+
+
+
+
+
+
+// // ROUTER to POST a MESSAGE
+// router.put("/message", requireLogin, (req, res) => {
+//     const message = {
+//         message: req.body.text,
+//         sentBy: req.user._id
+//     };
+
+//     POST.findByIdAndUpdate(req.body.postId, {
+//         $push: { messages: message }
+//     }, {
+//         new: true
+//     })
+//     .populate("messages.sentBy", "_id name")
+    
+//     .populate("sentBy", "_id name Photo")
+//     .then(result => {
+//         if (!result) {
+//             return res.status(422).json({ error: "Post not found" });
+//         }
+//         res.json(result);
+//     })
+//     .catch(err => {
+//         console.log(err);
+//         return res.status(422).json({ error: "Error adding comment" });
+//     });
+// });
+
+
+
+
 module.exports = router;
