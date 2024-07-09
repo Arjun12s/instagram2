@@ -9,6 +9,7 @@ const Message = () => {
     const [user, setUser] = useState({});
     const [conversations, setConversations] = useState([]);
     const [receiver, setReceiver] = useState(null);
+    const [statusMessage, setStatusMessage] = useState('');
 
     const piclink = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhcdVEzoVWLyCqD6wPIyxnxW3L2lYNzsmrGHK-A-tGxA&s';
 
@@ -43,13 +44,13 @@ const Message = () => {
                 },
             });
             const resData = await res.json();
-            setMessages(resData); // Set messages as an array
-            setReceiver(user); // Set the receiver user
-            setCurrentConversationId(conversationId); // Set the current conversation ID
+            setMessages(resData);
+            setReceiver(user);
+            setCurrentConversationId(conversationId);
         } catch (error) {
             console.error('Error fetching messages:', error);
         }
-    }
+    };
 
     const fetchUserData = () => {
         fetch(`/user/${JSON.parse(localStorage.getItem("user"))._id}`, {
@@ -77,15 +78,15 @@ const Message = () => {
             console.error('All fields are required');
             return;
         }
-    
+
         const payload = {
             conversationId: currentConversationId,
             senderId: senderId,
             message: currentMessage,
         };
-    
+
         console.log("Sending message with payload:", payload);
-    
+
         try {
             const res = await fetch(`/message`, {
                 method: "POST",
@@ -95,29 +96,25 @@ const Message = () => {
                 },
                 body: JSON.stringify(payload)
             });
-    
+
             if (!res.ok) {
                 const errorText = await res.text();
                 console.error('Error sending message:', errorText);
+                setStatusMessage('Failed to send message');
                 return;
             }
-    
+
             const resData = await res.json();
             console.log("Message sent successfully:", resData.newMessage);
-            
-            // Assuming resData.newMessage contains the new message object
-            setMessages((prevMessages) => {
-                const updatedMessages = [...prevMessages, resData.newMessage];
-                console.log("Updated messages:", updatedMessages);
-                return updatedMessages;
-            });
-            setCurrentMessage(""); // Clear the input field
+
+            setMessages((prevMessages) => [...prevMessages, resData.newMessage]);
+            setCurrentMessage("");
+            setStatusMessage('Message sent successfully');
         } catch (error) {
             console.error('Error sending message:', error);
+            setStatusMessage('Failed to send message');
         }
     };
-    
-
 
     return (
         <div className='OuterRange'>
@@ -169,6 +166,8 @@ const Message = () => {
                     </div>
                 </div>
 
+                {statusMessage && <div className="status-message">{statusMessage}</div>}
+
                 <div className="typing-Area">
                     <div className="selectfiles">
                         <span className="material-symbols-outlined">add_circle</span>
@@ -188,6 +187,6 @@ const Message = () => {
             </div>
         </div>
     );
-}
+};
 
 export default Message;

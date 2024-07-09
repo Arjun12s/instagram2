@@ -165,7 +165,7 @@ router.post('/message', requireLogin, async (req, res) => {
         const newMessage = new MSG({ conversationId, senderId, message });
         await newMessage.save();
 
-        // res.status(200).json({  newMessage });
+        res.status(200).json({ newMessage });
     } catch (error) {
         console.error('Error sending message:', error);
         res.status(500).json({ error: 'Internal server error' });
@@ -188,4 +188,5 @@ router.get('/message/:conversationId', requireLogin, async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
+
 module.exports = router;
