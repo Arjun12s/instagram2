@@ -132,8 +132,8 @@ const Message = () => {
                     <div className="Messages" style={{ display: "flex", marginLeft: "10px" }}>MESSAGES</div>
                     <div>
                         {conversations.map(({ conversationId, user }, index) => (
-                            <div key={index} className='OtherUserProfile'>
-                                <div className='profile-pic' onClick={() => fetchMessages(conversationId, user)}>
+                            <div key={index} className='OtherUserProfile'onClick={() => fetchMessages(conversationId, user)}>
+                                <div className='profile-pic' >
                                     <img src={user ? user.Photo : piclink} alt="profile" />
                                 </div>
                                 <h3 className="NAME">{user ? user.name : "Unknown"}</h3>
@@ -147,10 +147,26 @@ const Message = () => {
             <div className='layer2'>
                 {receiver?.name && (
                     <div className="UserMESSAGE">
-                        <div className='profile-pic'><img src={receiver?.Photo || piclink} alt="receiver" /></div>
+                        <div className='profile-pic'><img src={receiver?.Photo || piclink} alt="receiver" />
+                        <div className='symbols'>
+                        <span class="material-symbols-outlined">
+                                call
+                            </span>
+                            <span class="material-symbols-outlined">
+                                videocam
+                            </span>
+                            <span class="material-symbols-outlined">
+                                more_vert
+                            </span>
+                        </div>
+                        </div>
                         <h3 className="NAME" style={{ color: "red" }}>{receiver?.name}</h3>
                         <p className="ACCOUNT_Status">ACTIVE</p>
+                        
+                            
+                        
                     </div>
+
                 )}
                 <div className='msgbox'>
                     <div className='insidemsgbox'>

@@ -194,6 +194,9 @@
     border-radius: 5px 5px 5px 18px;
     padding: 10px;
 }
+.symbols{
+    margin: -5% 0px 0px 80%;
+}
 @media screen and (max-width: 800px){
     
 }

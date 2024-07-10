@@ -165,7 +165,7 @@ export default function Home() {
                             </Link>
                         </h5>
                     </div>
-                    <div className="card-media">
+                    <div className="card-media" onDoubleClick={() => handleLikeUnlike(post._id, post.likes.includes(JSON.parse(localStorage.getItem("user"))._id) ? "unlike" : "like")}>
                         {renderMedia(post.photo, post._id)}
                     </div>
                     <div className="card-content">

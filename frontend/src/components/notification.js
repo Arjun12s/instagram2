@@ -1,9 +1,9 @@
-import React from "react";
-export default function Notify(){
-    return(
-        <div>
-            Notification
-        </div>
-    )
+import React from 'react'
+
+const notification = () => {
+  return (
+    <div>notification</div>
+  )
 }
 
+export default notification
