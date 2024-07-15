@@ -1,6 +1,7 @@
 .OuterRange {
     width: 100%;
     display: flex;
+    position: fixed;
 }
 
 .layer1 {
@@ -11,6 +12,10 @@
 }
 
 .layer2 {
+    position: fixed;
+    margin-left: 35%;
+    margin-top: 1px;
+
     width: 65%;
     height: 640px;
     border-left: 1px solid gray;
@@ -88,16 +93,18 @@
 .msgbox {
     border: 0px solid black;
     background: yellow;
-    height: 80%;
+    /* height: 80%; */
     width: 100%;
     margin-top: 6px;
     border-radius: 10px;
     overflow: scroll;
     scrollbar-width: none;
+    height: 79%;
 }
 
 .inmsgbx {
     max-height: fit-content;
+    position: sticky;
     max-width: 40%;
     margin-top: 10px;
     margin-left: 5px;
@@ -197,6 +204,60 @@
 .symbols{
     margin: -5% 0px 0px 80%;
 }
+
+.otherusersprofile {
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    max-height: 440px;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+/* Custom scrollbar for WebKit browsers */
+.otherusersprofile::-webkit-scrollbar {
+    width: 8px; /* Width of the scrollbar */
+}
+
+.otherusersprofile::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Track color */
+}
+
+.otherusersprofile::-webkit-scrollbar-thumb {
+    background: #888; /* Thumb color */
+    border-radius: 4px; /* Rounded corners */
+}
+
+.otherusersprofile::-webkit-scrollbar-thumb:hover {
+    background: #555; /* Thumb color on hover */
+}
+
+/* Custom scrollbar for Firefox */
+.otherusersprofile {
+    scrollbar-width: none; /* Decreases the width of the scrollbar */
+    scrollbar-color: #888 #f1f1f1; /* Thumb color and track color */
+}
+
+/* Custom scrollbar for other browsers */
+.otherusersprofile::-ms-scrollbar {
+    width: 8px; /* Width of the scrollbar */
+}
+
+.otherusersprofile::-ms-scrollbar-track {
+    background: #f1f1f1; /* Track color */
+}
+
+.otherusersprofile::-ms-scrollbar-thumb {
+    background: #888; /* Thumb color */
+    border-radius: 4px; /* Rounded corners */
+}
+
+.otherusersprofile::-ms-scrollbar-thumb:hover {
+    background: #555; /* Thumb color on hover */
+}
+
+      
+
+
 @media screen and (max-width: 800px){
     
 }

@@ -197,7 +197,7 @@ const Message = () => {
                 <div>
                     <div className="search"><Search /></div>
                     <div className="Messages" style={{ display: "flex", marginLeft: "10px" }}>MESSAGES</div>
-                    <div>
+                    <div className='otherusersprofile'>
                         {conversations.map(({ conversationId, user }, index) => (
                             <div key={index} className='OtherUserProfile'>
                                 <div className='profile-pic' onClick={() => handleConversationClick(conversationId, user)}>
