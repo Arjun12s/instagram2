@@ -94,7 +94,7 @@ export default function UserProfile() {
         .then((res) => res.json())
         .then((data) => {
             console.log(data);
-            navigate(`/Message/${data.conversationId}`);
+            navigate(`/message`);
         })
         .catch((error) => {
             console.error('Error:', error);

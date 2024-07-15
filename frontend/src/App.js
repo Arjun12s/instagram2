@@ -31,7 +31,8 @@ function App() {
             <Route path='/signup' element={<SignUp />} />
             <Route path='/signin' element={<SignIn />} />
             <Route path='/profile' element={<Profile />} />
-            <Route path='/Message' element={<Message />} />
+            <Route exact path="/Message" component={Message}  element={<Message/>}/>
+            <Route path="/Message/:conversationId" component={Message} element={<Message/>}/>
             <Route path='/notification' element={<Notify />} />
             <Route path='/followingpost' element={<MyFollowingPost />} />
             <Route path='/profile/:userid' element={<UserProfile />} />

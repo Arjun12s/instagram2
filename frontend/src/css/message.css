@@ -5,7 +5,7 @@
 
 .layer1 {
     width: 35%;
-    height: 640px;
+    height: auto;
     /* border: 2px solid black; */
     background: #e1e1ef;
 }
