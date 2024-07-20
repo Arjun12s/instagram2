@@ -23,6 +23,9 @@ require('./modals/modal');
 require('./modals/post');
 require('./modals/Message');
 require('./modals/conversation');
+require('./modals/group');
+require('./modals/groupmsg');
+
 app.use(require('./routes/auth'));
 app.use(require('./routes/createPost'));
 app.use(require('./routes/user'));
@@ -36,8 +39,17 @@ mongoose.connect(mongoURL, { useNewUrlParser: true, useUnifiedTopology: true })
     console.log('Error connecting to MongoDB:', error);
   });
 
+// Track online users
+let onlineUsers = {};
+
 io.on('connection', (socket) => {
     console.log('connected to socket.io');
+
+    socket.on('user_connected', (userId) => {
+        onlineUsers[userId] = socket.id;
+        io.emit('update_user_status', { userId, status: 'online' });
+        console.log(`User connected: ${userId}`);
+    });
 
     socket.on('join_conversation', (conversationId) => {
         socket.join(conversationId);
@@ -48,8 +60,23 @@ io.on('connection', (socket) => {
         io.to(newMessage.conversationId).emit('receive_message', newMessage);
     });
 
+    socket.on('typing', ({ conversationId, userName }) => {
+        socket.to(conversationId).emit('typing', { conversationId, userName });
+    });
+
     socket.on('disconnect', () => {
-        console.log('user disconnected');
+        let userId = null;
+        for (let id in onlineUsers) {
+            if (onlineUsers[id] === socket.id) {
+                userId = id;
+                break;
+            }
+        }
+        if (userId) {
+            delete onlineUsers[userId];
+            io.emit('update_user_status', { userId, status: 'offline' });
+            console.log(`User disconnected: ${userId}`);
+        }
     });
 });
 

@@ -6,6 +6,8 @@ const POST = mongoose.model("POST");
 const USER = mongoose.model("USER");
 const CONVERSATION = mongoose.model("CONVERSATION");
 const MSG = mongoose.model("MSG");
+const GROUP = mongoose.model("GROUP");
+const GROUPMSG = mongoose.model("GROUPMSG");
 
 // TO GET USER PROFILE 
 router.get("/user/:id", (req, res) => {
@@ -188,5 +190,113 @@ router.get('/message/:conversationId', requireLogin, async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
+
+
+// Create a Group
+router.post('/group', requireLogin, async (req, res) => {
+    const { name, members } = req.body;
+
+    if (members.length < 3 || members.length > 500) {
+        return res.status(400).json({ error: 'Group members must be between 3 and 500.' });
+    }
+
+    const group = new GROUP({
+        name,
+        members,
+        admin: req.user._id
+    });
+
+    try {
+        await group.save();
+        res.status(201).json(group);
+    } catch (error) {
+        console.error('Error creating group:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+// Add member to Group
+router.put('/group/add', requireLogin, async (req, res) => {
+    const { groupId, memberId } = req.body;
+
+    try {
+        const group = await GROUP.findById(groupId);
+
+        if (!group) {
+            return res.status(404).json({ error: 'Group not found' });
+        }
+
+        if (group.members.length >= 500) {
+            return res.status(400).json({ error: 'Group cannot have more than 500 members' });
+        }
+
+        group.members.push(memberId);
+        await group.save();
+
+        res.status(200).json(group);
+    } catch (error) {
+        console.error('Error adding member:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+// Remove member from Group
+router.put('/group/remove', requireLogin, async (req, res) => {
+    const { groupId, memberId } = req.body;
+
+    try {
+        const group = await GROUP.findById(groupId);
+
+        if (!group) {
+            return res.status(404).json({ error: 'Group not found' });
+        }
+
+        group.members.pull(memberId);
+        await group.save();
+
+        res.status(200).json(group);
+    } catch (error) {
+        console.error('Error removing member:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+// Send Group Message
+router.post('/group/message', requireLogin, async (req, res) => {
+    const { groupId, message } = req.body;
+
+    const newGroupMessage = new GROUPMSG({
+        groupId,
+        senderId: req.user._id,
+        message
+    });
+
+    try {
+        await newGroupMessage.save();
+        res.status(201).json(newGroupMessage);
+    } catch (error) {
+        console.error('Error sending group message:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+// Get Group Messages
+router.get('/group/messages/:groupId', requireLogin, async (req, res) => {
+    try {
+        const groupId = req.params.groupId;
+
+        const messages = await GROUPMSG.find({ groupId });
+
+        if (!messages.length) {
+            return res.status(404).json({ error: 'No messages found for this group' });
+        }
+
+        res.status(200).json(messages);
+    } catch (error) {
+        console.error('Error fetching group messages:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 
 module.exports = router;

@@ -4,7 +4,7 @@ import '../css/message.css';
 import Search from './Search';
 import { io } from 'socket.io-client';
 
-const ENDPOINT = `http://localhost:3000`;
+const ENDPOINT = `https://www.elightevents.com/`;
 let socket;
 
 const Message = () => {
@@ -13,21 +13,39 @@ const Message = () => {
     const [messages, setMessages] = useState([]);
     const [currentMessage, setCurrentMessage] = useState("");
     const [currentConversationId, setCurrentConversationId] = useState(conversationId || null);
-    const [user, setUser] = useState({});
+    const [user, setUser] = useState(null);
     const [conversations, setConversations] = useState([]);
     const [receiver, setReceiver] = useState(null);
     const [statusMessage, setStatusMessage] = useState('');
+    const [isTyping, setIsTyping] = useState(false);
+    const [typingUser, setTypingUser] = useState('');
+    const [onlineUsers, setOnlineUsers] = useState({});
+    const [isLayer2Visible, setIsLayer2Visible] = useState(false);
 
     const piclink = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhcdVEzoVWLyCqD6wPIyxnxW3L2lYNzsmrGHK-A-tGxA&s';
 
-    const getToken = () => {
-        return localStorage.getItem("jwt");
-    };
+    // Get JWT token from localStorage
+    const getToken = () => localStorage.getItem("jwt");
 
+    // Initialize socket connection and setup listeners
     useEffect(() => {
         socket = io(ENDPOINT);
+
         socket.on('receive_message', (newMessage) => {
             setMessages((prevMessages) => [...prevMessages, newMessage]);
+        });
+
+        socket.on('typing', (data) => {
+            setTypingUser(data.userName);
+            setIsTyping(true);
+            setTimeout(() => setIsTyping(false), 5000); // Reset after 5 seconds of no typing
+        });
+
+        socket.on('update_user_status', ({ userId, status }) => {
+            setOnlineUsers((prevUsers) => ({
+                ...prevUsers,
+                [userId]: status
+            }));
         });
 
         return () => {
@@ -35,6 +53,7 @@ const Message = () => {
         };
     }, []);
 
+    // Fetch conversations for the logged-in user
     useEffect(() => {
         const fetchConversations = async () => {
             const token = getToken();
@@ -45,6 +64,11 @@ const Message = () => {
 
             try {
                 const user = JSON.parse(localStorage.getItem("user"));
+                if (!user) {
+                    console.error('No user found in localStorage');
+                    return;
+                }
+
                 const res = await fetch(`/conversation/${user._id}`, {
                     method: "GET",
                     headers: {
@@ -52,9 +76,11 @@ const Message = () => {
                         Authorization: `Bearer ${token}`
                     },
                 });
+
                 if (!res.ok) {
                     throw new Error('Error fetching conversations');
                 }
+
                 const resData = await res.json();
                 setConversations(Array.isArray(resData) ? resData : []);
             } catch (error) {
@@ -65,6 +91,7 @@ const Message = () => {
         fetchConversations();
     }, []);
 
+    // Fetch messages for the current conversation
     useEffect(() => {
         if (currentConversationId) {
             fetchMessages(currentConversationId);
@@ -87,9 +114,11 @@ const Message = () => {
                     Authorization: `Bearer ${token}`,
                 },
             });
+
             if (!res.ok) {
                 throw new Error('Error fetching messages');
             }
+
             const resData = await res.json();
             setMessages(resData);
             const conversation = conversations.find(conv => conv.conversationId === conversationId);
@@ -100,6 +129,7 @@ const Message = () => {
         }
     };
 
+    // Fetch user data from the server
     const fetchUserData = () => {
         const token = getToken();
         if (!token) {
@@ -116,6 +146,7 @@ const Message = () => {
             .then((res) => res.json())
             .then((result) => {
                 setUser(result.user);
+                socket.emit('user_connected', result.user._id);
             })
             .catch((error) => {
                 console.error('Error fetching user data:', error);
@@ -126,8 +157,9 @@ const Message = () => {
         fetchUserData();
     }, []);
 
+    // Send message to the server
     const sendMessage = async () => {
-        const senderId = JSON.parse(localStorage.getItem("user"))._id;
+        const senderId = JSON.parse(localStorage.getItem("user"))?._id;
         const token = getToken();
         if (!currentMessage || !currentConversationId || !senderId) {
             console.error('All fields are required');
@@ -177,46 +209,70 @@ const Message = () => {
         }
     };
 
+    // Handle conversation click to load messages
     const handleConversationClick = (conversationId, user) => {
         setReceiver(user);
         setCurrentConversationId(conversationId);
+        setIsLayer2Visible(true);
         navigate(`/Message/${conversationId}`);
     };
 
+    // Handle typing event
+    const handleTyping = (e) => {
+        setCurrentMessage(e.target.value);
+        socket.emit('typing', { conversationId: currentConversationId, userName: user?.userName });
+    };
+
+    // Handle back button click to hide layer 2
+    const handleBackClick = () => {
+        setIsLayer2Visible(false);
+    };
+
+    if (!user) return <div>Loading...</div>;
+
     return (
-        <div className='OuterRange'>
-            <div className='layer1'>
-                <div className='UserProfile'>
+        <div className='outer-range'>
+            <div className={`layer1 ${isLayer2Visible ? 'hidden' : ''}`}>
+                <div className='user-profile'>
                     <div className='profile-pic'>
                         <img src={user.Photo ? user.Photo : piclink} alt="" />
                     </div>
-                    <h3 className="NAME">{JSON.parse(localStorage.getItem("user")).name}</h3>
-                    <p className="MY_ACCOUNT">{JSON.parse(localStorage.getItem("user")).userName}</p>
+                    <h3 className="name">{user.name}</h3>
+                    <p className="my-account">{user.userName}</p>
                 </div>
                 <hr />
                 <div>
                     <div className="search"><Search /></div>
-                    <div className="Messages" style={{ display: "flex", marginLeft: "10px" }}>MESSAGES</div>
-                    <div className='otherusersprofile'>
+                    <div className="messages-title">MESSAGES</div>
+                    <div className='conversations'>
                         {conversations.map(({ conversationId, user }, index) => (
-                            <div key={index} className='OtherUserProfile'>
-                                <div className='profile-pic' onClick={() => handleConversationClick(conversationId, user)}>
+                            <div key={index} className='conversation' onClick={() => handleConversationClick(conversationId, user)}>
+                                <div className='profile-pic'>
                                     <img src={user ? user.Photo : piclink} alt="profile" />
                                 </div>
-                                <h3 className="NAME">{user ? user.name : "Unknown"}</h3>
-                                <p className="MY_ACCOUNT">ACCOUNT_Status</p>
+                                <h3 className="name">{user ? user.name : "Unknown"}</h3>
+                                <p className="my-account">{onlineUsers[user?._id] === 'online' && <span className="online-status">Online</span>}</p>
                                 <hr />
                             </div>
                         ))}
                     </div>
                 </div>
             </div>
-            <div className='layer2'>
+            <div className={`layer2 ${isLayer2Visible ? '' : 'hidden'}`}>
                 {receiver?.name && (
-                    <div className="UserMESSAGE">
+                    <div className="user-message">
+                        <button className="back-button" onClick={handleBackClick}><span class="material-symbols-outlined">
+                            arrow_back_ios
+                        </span></button>
                         <div className='profile-pic'><img src={receiver?.Photo || piclink} alt="receiver" /></div>
-                        <h3 className="NAME" style={{ color: "red" }}>{receiver?.name}</h3>
-                        <p className="ACCOUNT_Status">ACTIVE</p>
+                        <h3 className="name" style={{ color: "red" }}>{receiver?.name}</h3>
+                        <p className="account-status">{onlineUsers[receiver?._id] === 'online' ? 'ACTIVE' : 'OFFLINE'}</p>
+                        <div className="symbols">
+                            <span className="material-symbols-outlined">call</span>
+                            <span className="material-symbols-outlined">more_vert</span>
+                            <span className="material-symbols-outlined">videocam</span>
+                        </div>
+
                     </div>
                 )}
                 <div className='msgbox'>
@@ -228,29 +284,22 @@ const Message = () => {
                                 </div>
                             ))
                         ) : (
-                            <div style={{ background: "red", fontSize: "14px" }}>No messages</div>
+                            <div>No messages found</div>
                         )}
                     </div>
                 </div>
-
-                {statusMessage && <div className="status-message">{statusMessage}</div>}
-
-                <div className="typing-Area">
-                    <div className="selectfiles">
-                        <span className="material-symbols-outlined">add_circle</span>
-                    </div>
-                    <div className='textInput'>
-                        <input
-                            type="text"
-                            placeholder="Type a message"
-                            value={currentMessage}
-                            onChange={(e) => setCurrentMessage(e.target.value)}
-                        />
-                    </div>
-                    <div className="sendMessage">
-                        <span className="material-symbols-outlined" onClick={sendMessage}>send</span>
-                    </div>
+                {isTyping && <div>{typingUser} is typing...</div>}
+                <div className='message-container'>
+                    <textarea
+                        rows="1"
+                        cols="50"
+                        placeholder='Type your message...'
+                        value={currentMessage}
+                        onChange={handleTyping}
+                    />
+                    <span className="material-symbols-outlined" onClick={sendMessage}>send</span>
                 </div>
+                {statusMessage && <p>{statusMessage}</p>}
             </div>
         </div>
     );

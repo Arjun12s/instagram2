@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/home.css";
+import "../css/navbar.css"
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 
