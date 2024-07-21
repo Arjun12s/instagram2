@@ -4,7 +4,7 @@ import '../css/message.css';
 import Search from './Search';
 import { io } from 'socket.io-client';
 
-const ENDPOINT = process.env.REACT_APP_API_ENDPOINT || `http://localhost:3000`; // Use environment variable or fallback to Render URL
+// const ENDPOINT = process.env.REACT_APP_API_ENDPOINT || `http://localhost:3000`; // Use environment variable or fallback to Render URL
 
 let socket;
 
@@ -30,7 +30,7 @@ const Message = () => {
 
     // Initialize socket connection and setup listeners
     useEffect(() => {
-        socket = io(ENDPOINT);
+        socket = io();
 
         socket.on('receive_message', (newMessage) => {
             setMessages((prevMessages) => [...prevMessages, newMessage]);
