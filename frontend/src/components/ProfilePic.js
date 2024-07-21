@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useRef, useEffect } from "react";
 // import { cloudinary_cloud_name, cloudinary_upload_preset } from "../keys";
 
@@ -37,7 +38,7 @@ export default function ProfilePic({ changeprofile }) {
     };
 
     const postPic = (picUrl) => {
-        fetch(`https://www.elightevents.com/uploadProfilePic`, {
+        fetch(`/uploadProfilePic`, {
             method: "put",
             headers: {
                 "Content-Type": "application/json",

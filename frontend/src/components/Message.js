@@ -4,7 +4,7 @@ import '../css/message.css';
 import Search from './Search';
 import { io } from 'socket.io-client';
 
-const ENDPOINT = `http://localhost:3000/`;
+const ENDPOINT = 'http://localhost:3000';
 let socket;
 
 const Message = () => {
@@ -38,7 +38,7 @@ const Message = () => {
         socket.on('typing', (data) => {
             setTypingUser(data.userName);
             setIsTyping(true);
-            setTimeout(() => setIsTyping(false), 5000); // Reset after 5 seconds of no typing
+            setTimeout(() => setIsTyping(false), 3000); // Reset after 3 seconds of no typing
         });
 
         socket.on('update_user_status', ({ userId, status }) => {
@@ -262,7 +262,7 @@ const Message = () => {
             <div className={`layer2 ${isLayer2Visible ? '' : 'hidden'}`}>
                 {receiver?.name && (
                     <div className="user-message">
-                        <button className="back-button" onClick={handleBackClick}><span class="material-symbols-outlined">
+                        <button className="back-button" onClick={handleBackClick}><span className="material-symbols-outlined">
                             arrow_back_ios
                         </span></button>
                         <div className='profile-pic'><img src={receiver?.Photo || piclink} alt="receiver" /></div>

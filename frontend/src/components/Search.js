@@ -12,7 +12,7 @@ const debouncedSearch = debounce(async (query, setLoading, setError, setSearchRe
     setError(null);
 
     try {
-        const res = await fetch(`https://www.elightevents.com/searchUsers?q=${query}`, {
+        const res = await fetch(`/searchUsers?q=${query}`, {
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": "Bearer " + localStorage.getItem("jwt")

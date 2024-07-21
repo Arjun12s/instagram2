@@ -6,7 +6,7 @@ import SignUp from './components/SignUp';
 import SignIn from './components/SignIn';
 import Profile from './components/profile';
 import Home from './components/home';
-import CreatePost from './components/CreatePost';
+import CreatePost from './components/Createpost';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { LoginContext } from './context/loginContext';

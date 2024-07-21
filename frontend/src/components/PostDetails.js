@@ -12,7 +12,7 @@ export default function PostDetail({ item, toggleDetails }) {
 
     const removePost = (postId) => {
         if (window.confirm("Do you really want to delete the Post?")) {
-            fetch(`https://www.elightevents.com/deletePost/${postId}`, {
+            fetch(`/deletePost/${postId}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
@@ -33,7 +33,7 @@ export default function PostDetail({ item, toggleDetails }) {
                         console.error("toggleDetails is not a function");
                     }
                     notifyB("Post deleted sucessfully");
-                    navigate("https://www.elightevents.com/"); // Navigate to home page
+                    navigate("/"); // Navigate to home page
 
                 })
                 .catch((error) => {

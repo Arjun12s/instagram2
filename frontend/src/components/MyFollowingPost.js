@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/home.css";
@@ -11,7 +13,7 @@ export default function MyFollowingPost(){
     const [comment, setComment] = useState([])
     const [item, setItem] = useState(null); // Changed initial state to null
     const [show, setShow] = useState(false);
-    const [refreshData, setRefreshData] = useState(true);
+    const [, setRefreshData] = useState(true);
 
     const notifyA = (msg) => toast.error(msg);
     const notifyB = (msg) => toast.success(msg);
@@ -19,7 +21,7 @@ export default function MyFollowingPost(){
     useEffect(() => {
         const token = localStorage.getItem("jwt")
         if (!token) {
-            navigate("https://www.elightevents.com/signup")
+            navigate("./signup")
         }
         //FETCHING ALL TH POSTS
         fetch(`/myfollowingpost`, {
@@ -53,7 +55,7 @@ export default function MyFollowingPost(){
     }
 
     const likePost = (id) => {
-        fetch(`https://www.elightevents.com/like`, {
+        fetch(`like`, {
             method: "put",
             headers: {
                 "Content-Type": "application/json",
@@ -78,7 +80,7 @@ export default function MyFollowingPost(){
             });
     };
     const unlikePost = (id) => {
-        fetch(`https://www.elightevents.com/unlike`, {
+        fetch(`/unlike`, {
             method: "put",
             headers: {
                 "Content-Type": "application/json",
@@ -105,7 +107,7 @@ export default function MyFollowingPost(){
 
     // comment
     const makeComment = (text, id) => {
-        fetch(`https://www.elightevents.com/comment`, {
+        fetch(`/comment`, {
             method: "put",
             headers: {
                 "Content-Type": "application/json",

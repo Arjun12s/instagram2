@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable no-useless-escape */
 import React, {  useState ,useContext} from "react"
 import logo from "../image/logo.png"
 import "../css/Signin.css"
@@ -26,7 +28,7 @@ export default function SignIn() {
         }
 
         //SENDING DATA TO SERVER
-        fetch(`https://www.elightevents.com/signin`, {
+        fetch(`/signin`, {
             method: "post",
             headers: {
                 "Content-Type": "application/json"
@@ -40,7 +42,7 @@ export default function SignIn() {
                 if (data.error) {
                     notifyA(data.error)
                 } else {
-                    navigate(`https://www.elightevents.com/profile`)
+                    navigate(`/profile`)
                     notifyB("Signed in succesfully")
                     console.log(data)
                     localStorage.setItem("jwt",data.token)

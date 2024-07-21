@@ -11,14 +11,8 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
     pingTimeout: 600000,
-    cors: {
-        origin: 'https://www.elightevents.com',
-        methods: ["GET", "POST"],
-        allowedHeaders: ["my-custom-header"],
-        credentials: true
-    }
+    cors: { origin: '*' }
 });
-
 
 const PORT = process.env.PORT || 3000;
 
@@ -89,7 +83,7 @@ const Message = require('./modals/Message');
 const User = require('./modals/modal');  // Ensure the correct path for the User model
 
 // Example route to get a conversation by userId
-app.get('https://www.elightevents.com/conversation/:userId', async (req, res) => {
+app.get('/conversation/:userId', async (req, res) => {
     try {
         const conversations = await Conversation.find({ members: req.params.userId });
         res.status(200).json(conversations);
@@ -99,7 +93,7 @@ app.get('https://www.elightevents.com/conversation/:userId', async (req, res) =>
 });
 
 // Example route to get messages by conversationId
-app.get('https://www.elightevents.com/message/:conversationId', async (req, res) => {
+app.get('/message/:conversationId', async (req, res) => {
     try {
         const messages = await Message.find({ conversationId: req.params.conversationId });
         res.status(200).json(messages);
@@ -109,7 +103,7 @@ app.get('https://www.elightevents.com/message/:conversationId', async (req, res)
 });
 
 // Example route to create a new message
-app.post('https://www.elightevents.com/message', async (req, res) => {
+app.post('/message', async (req, res) => {
     const newMessage = new Message(req.body);
     try {
         const savedMessage = await newMessage.save();
@@ -120,7 +114,7 @@ app.post('https://www.elightevents.com/message', async (req, res) => {
 });
 
 // Example route to get user by userId
-app.get('https://www.elightevents.com/user/:userId', async (req, res) => {
+app.get('/user/:userId', async (req, res) => {
     try {
         const user = await User.findById(req.params.userId);
         res.status(200).json({ user });

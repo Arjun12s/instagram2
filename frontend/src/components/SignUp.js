@@ -31,7 +31,7 @@ export default function SignUp() {
         }
     
     //     //SENDING DATA TO SERVER
-        fetch(`https://www.elightevents.com/signup`, {
+        fetch(`/signup`, {
             method: "post",
             headers: {
                 "Content-Type": "application/json"
