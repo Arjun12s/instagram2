@@ -244,8 +244,7 @@ const Message = () => {
                 </div>
                 <hr />
                 <div>
-                    <div className="search"style={{margin:"0%",
-    marginTop:"-10%"}}><Search /></div>
+                    <div className="search"><Search /></div>
                     <div className="messages-title">MESSAGES</div>
                     <div className='conversations'>
                         {conversations.map(({ conversationId, user }, index) => (
