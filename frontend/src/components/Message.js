@@ -294,11 +294,13 @@ arrow_back
                     <textarea
                         rows="1"
                         cols="50"
+                        style={{    width: "87%",
+                            height: "60%"}}
                         placeholder='Type your message...'
                         value={currentMessage}
                         onChange={handleTyping}
                     />
-                    <span className="material-symbols-outlined" onClick={sendMessage}>send</span>
+                    <span className="material-symbols-outlined" onClick={sendMessage}style={{fontSize: "467%"}}>send</span>
                 </div>
                 {statusMessage && <p>{statusMessage}</p>}
             </div>

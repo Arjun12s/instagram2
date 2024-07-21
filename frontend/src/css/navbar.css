@@ -136,11 +136,13 @@
     }
     
     .nav-bottom {
+        bottom: -7px;
+        box-shadow: 0 -2px 5px #ccc;
+        background-color: #f9f9f9;
+        border-top: 1px solid #ccc;
         display: flex;
         justify-content: space-evenly;
-        padding: 10px 0; /* Adjusted padding */
-        background-color: #f9f9f9; /* Added background color */
-        border-top: 1px solid #ccc; /* Added border for better separation */
+        padding: 7% 0; /* Added border for better separation */
     }
 
     .material-symbols-outlined-log,
@@ -156,6 +158,12 @@
         padding: 7px 12px;
         border-radius: 10px;
         cursor: pointer;
+    }
+    .material-symbols-outlined {
+        cursor: pointer;
+        font-size: 24px;
+        margin-right: 10px;
+        font-size: xxx-large;
     }
 
     .msg {
