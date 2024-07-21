@@ -11,7 +11,7 @@ export default function UserProfile() {
     const [isFollow, setIsFollow] = useState(false);
 
     const followUser = (userId) => {
-        fetch(`/follow`, {
+        fetch(`https://www.elightevents.com/follow`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -30,7 +30,7 @@ export default function UserProfile() {
     };
 
     const unfollowUser = (userId) => {
-        fetch(`/unfollow`, {
+        fetch(`https://www.elightevents.com/unfollow`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -60,7 +60,7 @@ export default function UserProfile() {
         return <img src={mediaUrl} alt="post media" className="media" />;
     };
     useEffect(() => {
-        fetch(`/user/${userid}`, {
+        fetch(`https://www.elightevents.com/user/${userid}`, {
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("jwt")
             }
@@ -94,7 +94,7 @@ export default function UserProfile() {
         .then((res) => res.json())
         .then((data) => {
             console.log(data);
-            navigate(`/message`);
+            navigate(`https://www.elightevents.com/message`);
         })
         .catch((error) => {
             console.error('Error:', error);

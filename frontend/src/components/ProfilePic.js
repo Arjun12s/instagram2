@@ -37,7 +37,7 @@ export default function ProfilePic({ changeprofile }) {
     };
 
     const postPic = (picUrl) => {
-        fetch(`/uploadProfilePic`, {
+        fetch(`https://www.elightevents.com/uploadProfilePic`, {
             method: "put",
             headers: {
                 "Content-Type": "application/json",

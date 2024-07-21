@@ -21,7 +21,7 @@ export default function Profile() {
   };
 
   const fetchUserData = () => {
-    fetch(`/user/${JSON.parse(localStorage.getItem("user"))._id}`, {
+    fetch(`https://www.elightevents.com/user/${JSON.parse(localStorage.getItem("user"))._id}`, {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("jwt"),
       },

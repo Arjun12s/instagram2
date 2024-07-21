@@ -19,7 +19,7 @@ export default function MyFollowingPost(){
     useEffect(() => {
         const token = localStorage.getItem("jwt")
         if (!token) {
-            navigate("./signup")
+            navigate("https://www.elightevents.com/signup")
         }
         //FETCHING ALL TH POSTS
         fetch(`/myfollowingpost`, {
@@ -53,7 +53,7 @@ export default function MyFollowingPost(){
     }
 
     const likePost = (id) => {
-        fetch(`like`, {
+        fetch(`https://www.elightevents.com/like`, {
             method: "put",
             headers: {
                 "Content-Type": "application/json",
@@ -78,7 +78,7 @@ export default function MyFollowingPost(){
             });
     };
     const unlikePost = (id) => {
-        fetch(`/unlike`, {
+        fetch(`https://www.elightevents.com/unlike`, {
             method: "put",
             headers: {
                 "Content-Type": "application/json",
@@ -105,7 +105,7 @@ export default function MyFollowingPost(){
 
     // comment
     const makeComment = (text, id) => {
-        fetch(`/comment`, {
+        fetch(`https://www.elightevents.com/comment`, {
             method: "put",
             headers: {
                 "Content-Type": "application/json",

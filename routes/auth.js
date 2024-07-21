@@ -8,7 +8,7 @@ const requireLogin = require('../middelwares/requireLogin');
 const { Jwt_secret } = require('../keys');
 
 // Route for user signup
-router.post("/signup", (req, res) => {
+router.post("https://www.elightevents.com/signup", (req, res) => {
     const { name, userName, email, password } = req.body;
     if (!name || !userName || !email || !password) {
         return res.status(422).json({ error: "Please fill all the fields" });
@@ -39,7 +39,7 @@ router.post("/signup", (req, res) => {
 });
 
 // Route for user signin
-router.post("/signin", (req, res) => {
+router.post("https://www.elightevents.com/signin", (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) {
         return res.status(422).json({ error: "Please fill all the fields" });

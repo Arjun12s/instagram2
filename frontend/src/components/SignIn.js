@@ -26,7 +26,7 @@ export default function SignIn() {
         }
 
         //SENDING DATA TO SERVER
-        fetch(`/signin`, {
+        fetch(`https://www.elightevents.com/signin`, {
             method: "post",
             headers: {
                 "Content-Type": "application/json"
@@ -40,7 +40,7 @@ export default function SignIn() {
                 if (data.error) {
                     notifyA(data.error)
                 } else {
-                    navigate(`/profile`)
+                    navigate(`https://www.elightevents.com/profile`)
                     notifyB("Signed in succesfully")
                     console.log(data)
                     localStorage.setItem("jwt",data.token)
