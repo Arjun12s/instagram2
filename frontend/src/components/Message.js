@@ -250,7 +250,7 @@ const Message = () => {
                     <div className='conversations'>
                         {conversations.map(({ conversationId, user }, index) => (
                             <div key={index} className='conversation' onClick={() => handleConversationClick(conversationId, user)}>
-                                <div className='profile-pic'>
+                                <div className='profile-pic'style={{        margin:"0 5%"}}>
                                     <img src={user ? user.Photo : piclink} alt="profile" />
                                 </div>
                                 <h3 className="name">{user ? user.name : "Unknown"}</h3>
