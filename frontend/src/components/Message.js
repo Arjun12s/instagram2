@@ -4,7 +4,7 @@ import '../css/message.css';
 import Search from './Search';
 import { io } from 'socket.io-client';
 
-const ENDPOINT = `https://www.elightevents.com/`;
+const ENDPOINT = `http://localhost:3000/`;
 let socket;
 
 const Message = () => {
@@ -225,6 +225,7 @@ const Message = () => {
 
     // Handle back button click to hide layer 2
     const handleBackClick = () => {
+        navigate(`/Message`)
         setIsLayer2Visible(false);
     };
 
