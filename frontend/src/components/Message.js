@@ -263,9 +263,9 @@ const Message = () => {
             <div className={`layer2 ${isLayer2Visible ? '' : 'hidden'}`}>
                 {receiver?.name && (
                     <div className="user-message">
-                        <button className="back-button" onClick={handleBackClick}><span className="material-symbols-outlined">
-                            arrow_back_ios
-                        </span></button>
+                        <button className="back-button" onClick={handleBackClick}><span class="material-symbols-outlined">
+arrow_back
+</span></button>
                         <div className='profile-pic'><img src={receiver?.Photo || piclink} alt="receiver" /></div>
                         <h3 className="name" style={{ color: "red" }}>{receiver?.name}</h3>
                         <p className="account-status">{onlineUsers[receiver?._id] === 'online' ? 'ACTIVE' : 'OFFLINE'}</p>
