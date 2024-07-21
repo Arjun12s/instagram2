@@ -4,7 +4,7 @@ import '../css/message.css';
 import Search from './Search';
 import { io } from 'socket.io-client';
 
-const ENDPOINT = `http://www.elightevents.com/`;
+const ENDPOINT = `http://localhost:3000/`;
 let socket;
 
 const Message = () => {
@@ -225,8 +225,8 @@ const Message = () => {
 
     // Handle back button click to hide layer 2
     const handleBackClick = () => {
-        navigate(`/Message`)
         setIsLayer2Visible(false);
+        navigate(`/Message/`);
     };
 
     if (!user) return <div>Loading...</div>;
@@ -273,7 +273,6 @@ const Message = () => {
                             <span className="material-symbols-outlined">more_vert</span>
                             <span className="material-symbols-outlined">videocam</span>
                         </div>
-
                     </div>
                 )}
                 <div className='msgbox'>
@@ -288,8 +287,8 @@ const Message = () => {
                             <div>No messages found</div>
                         )}
                     </div>
+                    {isTyping && <div>{typingUser} is typing...</div>}
                 </div>
-                {isTyping && <div>{typingUser} is typing...</div>}
                 <div className='message-container'>
                     <textarea
                         rows="1"
