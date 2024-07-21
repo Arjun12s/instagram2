@@ -4,7 +4,8 @@ import '../css/message.css';
 import Search from './Search';
 import { io } from 'socket.io-client';
 
-const ENDPOINT = 'http://localhost:3000';
+const ENDPOINT = process.env.REACT_APP_API_ENDPOINT || `http://localhost:3000`; // Use environment variable or fallback to Render URL
+
 let socket;
 
 const Message = () => {
