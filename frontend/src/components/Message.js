@@ -256,7 +256,7 @@ const Message = () => {
                                 <h3 className="name">{user ? user.name : "Unknown"}</h3>
                                 {isTyping && <div>{typingUser} is typing...</div>}
                                 <p className="my-account">{onlineUsers[user?._id] === 'online' && <span className="online-status">Online</span>}</p>
-                                <hr />
+                                <hr></hr>
                             </div>
                         ))}
                     </div>
