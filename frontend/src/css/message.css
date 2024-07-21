@@ -1,6 +1,6 @@
 .outer-range {
     display: flex;
-    height: 100vh;
+    height: 88vh;
     overflow: hidden;
 }
 
@@ -99,14 +99,14 @@
 .user-message .name {
     color: red;
     flex: 1 1;
-    font-size: 189%;
+    font-size: 100%;
     margin-left: .5rem;
     font-weight: revert;
 }
 
 .account-status {
     color: green;
-    font-size: 180%;
+    font-size: 70%;
 }
 
 .symbols {
@@ -217,9 +217,25 @@
     }
 
     .profile-pic {
+        /* height: -moz-fit-content; */
         height: fit-content;
-        padding: 7px;
-        margin: 0% 4%;
+        margin: 0px 0%;
+        padding: 0px;
+    
+    }
+    .user-message .name {
+        color: red;
+        flex: 1 1;
+        display: -webkit-inline-box;
+        font-size: 100%;
+        font-weight: revert;
+        margin-left: .5rem;
+    }
+    .account-status {
+        color: green;
+        font-size: 70%;
+        margin: 7%;
+        /* display: flex; */
     }
 
     .user-message {
@@ -253,7 +269,7 @@
     .message-container {
         background-color: #f1f1f1;
         border-top: 1px solid #ccc;
-        bottom: 2%;
+        bottom: 1%;
         display: flex;
         height: 6%;
         padding: 1%;
@@ -264,16 +280,18 @@
 
     .message-container textarea {
         flex: 1 1;
-    font-size: 250%;
-    height: 30%;
-    resize: none;
+        font-size: 107%;
+        /* height: 30%; */
+        resize: none;
     }
-    .material-symbols-outlined {
+    .symbols .material-symbols-outlined {
         cursor: pointer;
-        font-size: xxx-large;
-        margin-right: 10px;
+        font-size: 130%;
+        margin-left: -0.5rem;
+        margin-right: 0px;
+    
     }
-    .material-symbols-outlined {
+    .symbols.material-symbols-outlined {
         cursor: pointer;
         margin-left: 0.5rem;
     }
@@ -291,14 +309,19 @@
     }
 
     .inmsg {
+        
+        /* align-self: flex-end; */
+        /* background-color: #0084ff; */
+        /* color: #fff; */
+        font-size: 94%;
         background-color: #e0e0e0;
         align-self: flex-start;
-        font-size: 190%;
+        /* font-size: 190%; */
     }
 
     .outmsg {
         align-self: flex-end;
-        font-size: 190%;
+        font-size: 94%;
         background-color: #0084ff;
         color: #fff;
     }

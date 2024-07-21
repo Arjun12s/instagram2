@@ -1,10 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import '../css/message.css';
 import Search from './Search';
 import { io } from 'socket.io-client';
-
-// const ENDPOINT = process.env.REACT_APP_API_ENDPOINT || `http://localhost:3000`; // Use environment variable or fallback to Render URL
+// const ENDPOINT = process.env.REACT_APP_ENDPOINT || `http://localhost:3000`;
 
 let socket;
 
@@ -28,12 +28,48 @@ const Message = () => {
     // Get JWT token from localStorage
     const getToken = () => localStorage.getItem("jwt");
 
+    // Request permission for notifications
+    const requestNotificationPermission = () => {
+        if (Notification.permission === 'default') {
+            Notification.requestPermission().then(permission => {
+                if (permission === 'granted') {
+                    console.log('Notification permission granted.');
+                } else {
+                    console.log('Notification permission denied.');
+                }
+            });
+        } else if (Notification.permission === 'granted') {
+            console.log('Notification permission already granted.');
+        } else {
+            console.log('Notification permission already denied.');
+        }
+    };
+
+    // Show notification
+    const showNotification = (message) => {
+        if (Notification.permission === 'granted') {
+            const notification = new Notification('New Message', {
+                body: message.message,
+                icon: receiver?.Photo || piclink,
+            });
+
+            notification.onclick = () => {
+                navigate(`/Message/${conversationId}`);
+                window.focus();
+            };
+            console.log("Notification sent");
+        } else {
+            console.log('Notification permission not granted.');
+        }
+    };
+
     // Initialize socket connection and setup listeners
     useEffect(() => {
         socket = io();
 
         socket.on('receive_message', (newMessage) => {
             setMessages((prevMessages) => [...prevMessages, newMessage]);
+            showNotification(newMessage);
         });
 
         socket.on('typing', (data) => {
@@ -156,6 +192,7 @@ const Message = () => {
 
     useEffect(() => {
         fetchUserData();
+        requestNotificationPermission();
     }, []);
 
     // Send message to the server
@@ -249,7 +286,7 @@ const Message = () => {
                     <div className='conversations'>
                         {conversations.map(({ conversationId, user }, index) => (
                             <div key={index} className='conversation' onClick={() => handleConversationClick(conversationId, user)}>
-                                <div className='profile-pic'style={{        margin:"0 5%"}}>
+                                <div className='profile-pic' style={{ margin:"0 5%" }}>
                                     <img src={user ? user.Photo : piclink} alt="profile" />
                                 </div>
                                 <h3 className="name">{user ? user.name : "Unknown"}</h3>
@@ -264,21 +301,15 @@ const Message = () => {
             <div className={`layer2 ${isLayer2Visible ? '' : 'hidden'}`}>
                 {receiver?.name && (
                     <div className="user-message">
-                        <button className="back-button" onClick={handleBackClick}><span class="material-symbols-outlined">
-arrow_back
-</span></button>
+                        <button className="back-button" onClick={handleBackClick}><span className="material-symbols-outlined">arrow_back</span></button>
                         <div className='profile-pic'><img src={receiver?.Photo || piclink} alt="receiver" /></div>
                         <h3 className="name" style={{ color: "red" }}>{receiver?.name}</h3>
-                        {isTyping && <div>{typingUser} is typing...</div>}
+                        {/* {isTyping && <div>{typingUser} is typing...</div>} */}
                         <p className="account-status">{onlineUsers[receiver?._id] === 'online' ? 'ACTIVE' : 'OFFLINE'}</p>
                         <div className="symbols">
-                            <span className="material-symbols-outlined"style={{fontSize:    "-webkit-xxx-large",
-    fontWeight:" 900"}}>call</span>
-    <span className="material-symbols-outlined"style={{fontSize:    "-webkit-xxx-large",
-    fontWeight:" 900"}}>videocam</span>
-                            <span className="material-symbols-outlined"style={{fontSize:    "-webkit-xxx-large",
-    fontWeight:" 900"}}>more_vert</span>
-                            
+                            <span className="material-symbols-outlined" style={{ fontSize: "145%", fontWeight: "900" }}>call</span>
+                            <span className="material-symbols-outlined" style={{ fontSize: "145%", fontWeight: "900" }}>videocam</span>
+                            <span className="material-symbols-outlined" style={{ fontSize: "145%", fontWeight: "900" }}>more_vert</span>
                         </div>
                     </div>
                 )}
@@ -294,19 +325,16 @@ arrow_back
                             <div>No messages found</div>
                         )}
                     </div>
-                    
                 </div>
                 <div className='message-container'>
                     <textarea
                         rows="1"
                         cols="50"
-                        style={{    width: "87%",
-                            height: "60%"}}
                         placeholder='Type your message...'
                         value={currentMessage}
                         onChange={handleTyping}
                     />
-                    <span className="material-symbols-outlined" onClick={sendMessage}style={{fontSize: "467%"}}>send</span>
+                    <span className="material-symbols-outlined" onClick={sendMessage} style={{ fontSize: "205%" }}>send</span>
                 </div>
                 {statusMessage && <p>{statusMessage}</p>}
             </div>

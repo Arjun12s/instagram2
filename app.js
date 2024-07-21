@@ -75,6 +75,15 @@ io.on('connection', (socket) => {
         const { conversationId, userName } = data;
         io.to(conversationId).emit('typing', { userName });
     });
+
+
+    socket.on('CallUser', (data) => {
+        io.to(data.userToCall).emit('CallUser', { signal: data.signalData, from: data.from, name: data.name });
+    });
+
+    socket.on('AcceptCall', (data) => {
+        io.to(data.to).emit('CallAccepted', data.signal);
+    });
 });
 
 // Define API routes here
