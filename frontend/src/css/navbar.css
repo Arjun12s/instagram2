@@ -96,9 +96,10 @@
     border-radius: 10px;
 }@media screen and (max-width: 800px) {
     .nav-top {
-        display: flex;
+        height: 6%;
         align-items: center;
-        padding: 10px 10px;
+        display: flex;
+        padding: 10px;
     }
     
     .nav-top ul {

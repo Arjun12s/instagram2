@@ -270,9 +270,12 @@ arrow_back
                         <h3 className="name" style={{ color: "red" }}>{receiver?.name}</h3>
                         <p className="account-status">{onlineUsers[receiver?._id] === 'online' ? 'ACTIVE' : 'OFFLINE'}</p>
                         <div className="symbols">
-                            <span className="material-symbols-outlined">call</span>
-                            <span className="material-symbols-outlined">more_vert</span>
-                            <span className="material-symbols-outlined">videocam</span>
+                            <span className="material-symbols-outlined"style={{fontSize:    "-webkit-xxx-large",
+    fontWeight:" 900"}}>call</span>
+                            <span className="material-symbols-outlined"style={{fontSize:    "-webkit-xxx-large",
+    fontWeight:" 900"}}>more_vert</span>
+                            <span className="material-symbols-outlined"style={{fontSize:    "-webkit-xxx-large",
+    fontWeight:" 900"}}>videocam</span>
                         </div>
                     </div>
                 )}
