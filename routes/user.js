@@ -10,7 +10,7 @@ const GROUP = mongoose.model("GROUP");
 const GROUPMSG = mongoose.model("GROUPMSG");
 
 // TO GET USER PROFILE 
-router.get("https://www.elightevents.com/user/:id", (req, res) => {
+router.get("/user/:id", (req, res) => {
     USER.findOne({ _id: req.params.id })
         .select("-password -email")
         .then(user => {
@@ -32,7 +32,7 @@ router.get("https://www.elightevents.com/user/:id", (req, res) => {
 });
 
 // FOLLOW USER
-router.put("https://www.elightevents.com/follow", requireLogin, async (req, res) => {
+router.put("/follow", requireLogin, async (req, res) => {
     try {
         const post = await USER.findByIdAndUpdate(
             req.body.followId,
@@ -54,7 +54,7 @@ router.put("https://www.elightevents.com/follow", requireLogin, async (req, res)
 });
 
 // UNFOLLOW USER
-router.put("https://www.elightevents.com/unfollow", requireLogin, async (req, res) => {
+router.put("/unfollow", requireLogin, async (req, res) => {
     try {
         const post = await USER.findByIdAndUpdate(
             req.body.followId,
@@ -76,7 +76,7 @@ router.put("https://www.elightevents.com/unfollow", requireLogin, async (req, re
 });
 
 // TO UPLOAD PROFILE PIC
-router.put("https://www.elightevents.com/uploadProfilePic", requireLogin, (req, res) => {
+router.put("/uploadProfilePic", requireLogin, (req, res) => {
     USER.findByIdAndUpdate(
         req.user._id,
         { $set: { Photo: req.body.pic } },
@@ -91,7 +91,7 @@ router.put("https://www.elightevents.com/uploadProfilePic", requireLogin, (req, 
 });
 
 // ROUTER to Search for all users
-router.get("https://www.elightevents.com/searchUsers", requireLogin, async (req, res) => {
+router.get("/searchUsers", requireLogin, async (req, res) => {
     try {
         const keyword = req.query.search ? {
             $or: [
@@ -110,7 +110,7 @@ router.get("https://www.elightevents.com/searchUsers", requireLogin, async (req,
 
 // Create a conversation or fetch existing one
 // CREATE A CONVERSATION
-router.post(`https://www.elightevents.com/conversation`, requireLogin, async (req, res) => {
+router.post(`/conversation`, requireLogin, async (req, res) => {
     try {
         const { senderId, receiverId } = req.body;
 
@@ -132,7 +132,7 @@ router.post(`https://www.elightevents.com/conversation`, requireLogin, async (re
 });
 
 // GET CONVERSATIONS FOR A USER
-router.get(`https://www.elightevents.com/conversation/:userid`, requireLogin, async (req, res) => {
+router.get(`/conversation/:userid`, requireLogin, async (req, res) => {
     try {
         const userId = req.params.userid;
 
@@ -155,7 +155,7 @@ router.get(`https://www.elightevents.com/conversation/:userid`, requireLogin, as
 });
 
 // Send a message
-router.post('https://www.elightevents.com/message', requireLogin, async (req, res) => {
+router.post('/message', requireLogin, async (req, res) => {
     try {
         const { conversationId, message } = req.body;
         const senderId = req.user._id;
@@ -175,7 +175,7 @@ router.post('https://www.elightevents.com/message', requireLogin, async (req, re
 });
 
 // GET MESSAGES FOR A CONVERSATION
-router.get('https://www.elightevents.com/message/:conversationId', requireLogin, async (req, res) => {
+router.get('/message/:conversationId', requireLogin, async (req, res) => {
     try {
         const conversationId = req.params.conversationId;
         const messages = await MSG.find({ conversationId });
@@ -193,7 +193,7 @@ router.get('https://www.elightevents.com/message/:conversationId', requireLogin,
 
 
 // Create a Group
-router.post('https://www.elightevents.com/group', requireLogin, async (req, res) => {
+router.post('/group', requireLogin, async (req, res) => {
     const { name, members } = req.body;
 
     if (members.length < 3 || members.length > 500) {
@@ -216,7 +216,7 @@ router.post('https://www.elightevents.com/group', requireLogin, async (req, res)
 });
 
 // Add member to Group
-router.put('https://www.elightevents.com/group/add', requireLogin, async (req, res) => {
+router.put('/group/add', requireLogin, async (req, res) => {
     const { groupId, memberId } = req.body;
 
     try {
@@ -241,7 +241,7 @@ router.put('https://www.elightevents.com/group/add', requireLogin, async (req, r
 });
 
 // Remove member from Group
-router.put('https://www.elightevents.com/group/remove', requireLogin, async (req, res) => {
+router.put('/group/remove', requireLogin, async (req, res) => {
     const { groupId, memberId } = req.body;
 
     try {
@@ -262,7 +262,7 @@ router.put('https://www.elightevents.com/group/remove', requireLogin, async (req
 });
 
 // Send Group Message
-router.post('https://www.elightevents.com/group/message', requireLogin, async (req, res) => {
+router.post('/group/message', requireLogin, async (req, res) => {
     const { groupId, message } = req.body;
 
     const newGroupMessage = new GROUPMSG({
@@ -281,7 +281,7 @@ router.post('https://www.elightevents.com/group/message', requireLogin, async (r
 });
 
 // Get Group Messages
-router.get('https://www.elightevents.com/group/messages/:groupId', requireLogin, async (req, res) => {
+router.get('/group/messages/:groupId', requireLogin, async (req, res) => {
     try {
         const groupId = req.params.groupId;
 

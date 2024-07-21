@@ -4,7 +4,7 @@ import '../css/message.css';
 import Search from './Search';
 import { io } from 'socket.io-client';
 
-const ENDPOINT = `https://www.elightevents.com`;
+const ENDPOINT = `http://localhost:3000/`;
 let socket;
 
 const Message = () => {
@@ -69,7 +69,7 @@ const Message = () => {
                     return;
                 }
 
-                const res = await fetch(`https://www.elightevents.com/conversation/${user._id}`, {
+                const res = await fetch(`/conversation/${user._id}`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -107,7 +107,7 @@ const Message = () => {
         }
 
         try {
-            const res = await fetch(`https://www.elightevents.com/message/${conversationId}`, {
+            const res = await fetch(`/message/${conversationId}`, {
                 method: "GET",
                 headers: {
                     'Content-type': "application/json",
@@ -137,7 +137,7 @@ const Message = () => {
             return;
         }
 
-        fetch(`https://www.elightevents.com/user/${JSON.parse(localStorage.getItem("user"))._id}`, {
+        fetch(`/user/${JSON.parse(localStorage.getItem("user"))._id}`, {
             headers: {
                 'Content-type': "application/json",
                 Authorization: `Bearer ${token}`,
@@ -180,7 +180,7 @@ const Message = () => {
         console.log("Sending message with payload:", payload);
 
         try {
-            const res = await fetch(`https://www.elightevents.com/message`, {
+            const res = await fetch(`/message`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -214,7 +214,7 @@ const Message = () => {
         setReceiver(user);
         setCurrentConversationId(conversationId);
         setIsLayer2Visible(true);
-        navigate(`https://www.elightevents.com/Message/${conversationId}`);
+        navigate(`/Message/${conversationId}`);
     };
 
     // Handle typing event
@@ -226,7 +226,7 @@ const Message = () => {
     // Handle back button click to hide layer 2
     const handleBackClick = () => {
         setIsLayer2Visible(false);
-        navigate(`https://www.elightevents.com/Message/`);
+        navigate(`/Message/`);
     };
 
     if (!user) return <div>Loading...</div>;
