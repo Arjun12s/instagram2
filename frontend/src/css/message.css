@@ -73,9 +73,9 @@
 }
 
 .conversation .name {
-    flex: 1;
-    font-size: 1rem;
-    margin-left: 0.5rem;
+    flex: 1 1;
+    font-size: 135%;
+    margin-left: .5rem;
 }
 
 .online-status {
@@ -97,15 +97,16 @@
 }
 
 .user-message .name {
-    flex: 1;
-    font-size: 1.2rem;
-    margin-left: 0.5rem;
     color: red;
+    flex: 1 1;
+    font-size: 189%;
+    margin-left: .5rem;
+    font-weight: revert;
 }
 
 .account-status {
-    font-size: 0.9rem;
     color: green;
+    font-size: 180%;
 }
 
 .symbols {
@@ -162,6 +163,7 @@
     border-radius: 5px;
     resize: none;
     outline: none;
+    
 }
 
 .message-container .material-symbols-outlined {
@@ -229,8 +231,8 @@
     .msgbox {
         flex: 1 1;
         overflow-y: auto;
-        padding-bottom: 29%;
-        padding-top: 16%;
+        padding-bottom: 34%;
+        padding-top: 34%;
     }
     /* .msgbox {
         display: flex;
@@ -255,8 +257,9 @@
 
     .message-container textarea {
         flex: 1 1;
-        resize: none;
-        height: 30%;
+    font-size: 250%;
+    height: 30%;
+    resize: none;
     }
     .material-symbols-outlined {
         cursor: pointer;
@@ -283,11 +286,23 @@
     .inmsg {
         background-color: #e0e0e0;
         align-self: flex-start;
+        font-size: 190%;
     }
 
     .outmsg {
-        background-color: #0084ff;
-        color: white;
         align-self: flex-end;
+        font-size: 190%;
+        background-color: #0084ff;
+        color: #fff;
+    }
+    .user-profile {
+        margin: 10% 0%;
+        align-items: center;
+        background-color: #fff;
+        box-shadow: 0 1px 2px #0000001a;
+        display: flex;
+        top: 47px;
+        flex-direction: column;
+        /* padding: 1rem; */
     }
 }
