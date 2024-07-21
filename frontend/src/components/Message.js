@@ -244,7 +244,8 @@ const Message = () => {
                 </div>
                 <hr />
                 <div>
-                    <div className="search"><Search /></div>
+                    <div className="search"style={{margin:"0%",
+    marginTop:"-10%"}}><Search /></div>
                     <div className="messages-title">MESSAGES</div>
                     <div className='conversations'>
                         {conversations.map(({ conversationId, user }, index) => (
@@ -253,6 +254,7 @@ const Message = () => {
                                     <img src={user ? user.Photo : piclink} alt="profile" />
                                 </div>
                                 <h3 className="name">{user ? user.name : "Unknown"}</h3>
+                                {isTyping && <div>{typingUser} is typing...</div>}
                                 <p className="my-account">{onlineUsers[user?._id] === 'online' && <span className="online-status">Online</span>}</p>
                                 <hr />
                             </div>
@@ -268,14 +270,16 @@ arrow_back
 </span></button>
                         <div className='profile-pic'><img src={receiver?.Photo || piclink} alt="receiver" /></div>
                         <h3 className="name" style={{ color: "red" }}>{receiver?.name}</h3>
+                        {isTyping && <div>{typingUser} is typing...</div>}
                         <p className="account-status">{onlineUsers[receiver?._id] === 'online' ? 'ACTIVE' : 'OFFLINE'}</p>
                         <div className="symbols">
                             <span className="material-symbols-outlined"style={{fontSize:    "-webkit-xxx-large",
     fontWeight:" 900"}}>call</span>
+    <span className="material-symbols-outlined"style={{fontSize:    "-webkit-xxx-large",
+    fontWeight:" 900"}}>videocam</span>
                             <span className="material-symbols-outlined"style={{fontSize:    "-webkit-xxx-large",
     fontWeight:" 900"}}>more_vert</span>
-                            <span className="material-symbols-outlined"style={{fontSize:    "-webkit-xxx-large",
-    fontWeight:" 900"}}>videocam</span>
+                            
                         </div>
                     </div>
                 )}
@@ -291,7 +295,7 @@ arrow_back
                             <div>No messages found</div>
                         )}
                     </div>
-                    {isTyping && <div>{typingUser} is typing...</div>}
+                    
                 </div>
                 <div className='message-container'>
                     <textarea
