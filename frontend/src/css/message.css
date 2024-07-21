@@ -257,7 +257,11 @@
         resize: none;
         height: 30%;
     }
-
+    .material-symbols-outlined {
+        cursor: pointer;
+        font-size: xxx-large;
+        margin-right: 10px;
+    }
     .material-symbols-outlined {
         cursor: pointer;
         margin-left: 0.5rem;
